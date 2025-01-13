@@ -37,17 +37,20 @@ function updateTable(data) {
   tableBody.innerHTML = '';  // Очистить таблицу
   data.forEach((item, index) => {
     const row = document.createElement('tr');
-    const cell = document.createElement('td');
+    const numberCell = document.createElement('td');
+    const nameCell = document.createElement('td');
     const deleteCell = document.createElement('td');
     
-    cell.textContent = item;
+    numberCell.textContent = index + 1;  // Номер участника
+    nameCell.textContent = item;         // ФИО участника
     
     const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete';
+    deleteButton.textContent = 'Удалить';
     deleteButton.onclick = () => deleteData(index);
     
     deleteCell.appendChild(deleteButton);
-    row.appendChild(cell);
+    row.appendChild(numberCell);
+    row.appendChild(nameCell);
     row.appendChild(deleteCell);
     tableBody.appendChild(row);
   });
@@ -59,8 +62,8 @@ function deleteData(index) {
   get(tableRef).then((snapshot) => {
     const data = snapshot.val();
     if (data) {
-      data.splice(index, 1);
-      saveData(data);  // Сохранить обновлённый список
+      data.splice(index, 1);  // Удаляем выбранный элемент
+      saveData(data);  // Сохраняем обновлённые данные в базе
     }
   });
 }
