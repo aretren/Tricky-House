@@ -1,71 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Table</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Table</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Ваш контент страницы, таблица и поля ввода -->
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js";
-    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
-
-    // Firebase Configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyDPZfsVqCG1kbI8d2ev74gWeHnorpD2lkM",
-      authDomain: "dynamictableproject.firebaseapp.com",
-      projectId: "dynamictableproject",
-      storageBucket: "dynamictableproject.firebasestorage.app",
-      messagingSenderId: "833661205938",
-      appId: "1:833661205938:web:fa757d8070329d2dc3c8ab",
-      measurementId: "G-T419JQJQVP"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    // Функция для сохранения данных в Firebase
-    function saveData(data) {
-      set(ref(db, 'tableData'), {
-        data: data
-      });
-    }
-
-    // Функция для получения данных из Firebase
-    function loadData() {
-      const tableRef = ref(db, 'tableData');
-      onValue(tableRef, (snapshot) => {
-        const data = snapshot.val();
-        updateTable(data);  // Обновите таблицу, используя эти данные
-      });
-    }
-
-    // Загрузить данные при старте страницы
-    loadData();
-
-    // Пример функции для обновления таблицы
-    function updateTable(data) {
-      const tableBody = document.getElementById('table-body');
-      tableBody.innerHTML = '';  // Очистить таблицу
-      data.forEach(item => {
-        const row = document.createElement('tr');
-        const cell = document.createElement('td');
-        cell.textContent = item;  // Добавьте текст ячейки из данных
-        row.appendChild(cell);
-        tableBody.appendChild(row);
-      });
-    }
-
-    // Пример вызова функции сохранения данных (например, при добавлении нового значения)
-    function addDataToFirebase(newData) {
-      loadData().push(newData);  // Добавить данные
-      saveData(newData);  // Сохранить изменения в Firebase
-    }
-
-  </script>
+    <h1>Dynamic Table</h1>
+    
+    <input type="text" id="newData" placeholder="Enter new value" />
+    <button id="addButton">Add Data</button>
+    
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Value</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Rows will be dynamically added here -->
+        </tbody>
+    </table>
+    
+    <script type="module" src="script.js"></script>
 </body>
 </html>
