@@ -33,7 +33,7 @@ document.getElementById('checkButton').onclick = async () => {
 
         if (values.includes(inputValue)) {
           // Если значение найдено, перенаправляем на страницу
-          window.location.href = "https://opros.com";
+          window.location.href = "https://vk.com/video-11254710_456241594?ysclid=m5v5kpfnnk179110829";
         } else {
           alert("Данные не найдены в списке.");
         }
