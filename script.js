@@ -1,11 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 // Ваши данные Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDPZfsVqCG1kbI8d2ev74gWeHnorpD2lkM",
   authDomain: "dynamictableproject.firebaseapp.com",
-  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app", // Обновлённый URL базы данных
+  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app", // URL вашей Realtime Database
   projectId: "dynamictableproject",
   storageBucket: "dynamictableproject.firebasestorage.app",
   messagingSenderId: "833661205938",
@@ -22,12 +22,12 @@ function saveData(data) {
   set(ref(db, 'tableData'), data);
 }
 
-// Загрузка данных из Firebase
-function loadData() {
+// Загрузка данных из Firebase (однократный запрос)
+function loadData(callback) {
   const tableRef = ref(db, 'tableData');
-  onValue(tableRef, (snapshot) => {
+  get(tableRef).then((snapshot) => {
     const data = snapshot.val() || [];
-    updateTable(data);
+    callback(data);  // Передаем данные в callback
   });
 }
 
@@ -56,10 +56,12 @@ function updateTable(data) {
 // Удаление данных
 function deleteData(index) {
   const tableRef = ref(db, 'tableData');
-  onValue(tableRef, (snapshot) => {
+  get(tableRef).then((snapshot) => {
     const data = snapshot.val();
-    data.splice(index, 1);
-    saveData(data);  // Сохранить обновлённый список
+    if (data) {
+      data.splice(index, 1);
+      saveData(data);  // Сохранить обновлённый список
+    }
   });
 }
 
@@ -67,15 +69,14 @@ function deleteData(index) {
 document.getElementById('addButton').onclick = () => {
   const newData = document.getElementById('newData').value.trim();
   if (newData) {
-    const tableRef = ref(db, 'tableData');
-    onValue(tableRef, (snapshot) => {
-      const data = snapshot.val() || [];
+    loadData((data) => {
+      // Добавляем новое значение в массив
       data.push(newData);
-      saveData(data);  // Сохранить новые данные
+      saveData(data);  // Сохраняем обновлённые данные в базе
+      document.getElementById('newData').value = '';  // Очистить поле ввода
     });
-    document.getElementById('newData').value = '';  // Очистить поле ввода
   }
 };
 
 // Загрузить данные при старте
-loadData();
+loadData(updateTable);
