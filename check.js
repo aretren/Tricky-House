@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 // Ваши данные Firebase
 const firebaseConfig = {
@@ -17,22 +17,27 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Функция для проверки введённого значения
+// Обработка кнопки проверки
 document.getElementById('checkButton').onclick = () => {
-  const checkValue = document.getElementById('checkValue').value.trim();
+  const inputValue = document.getElementById('checkData').value.trim();
   
-  if (checkValue) {
+  if (inputValue) {
+    // Загружаем данные из базы
     const tableRef = ref(db, 'tableData');
-    onValue(tableRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data && data.includes(checkValue)) {
-        // Если введённое значение есть в базе данных, перенаправляем на сайт
-        window.location.href = "https://opros.com"; // Перенаправление
+    get(tableRef).then((snapshot) => {
+      const data = snapshot.val() || []; // Получаем данные или пустой массив
+      if (data.includes(inputValue)) {
+        // Если значение найдено, перенаправляем на страницу
+        window.location.href = "https://opros.com";
       } else {
-        alert('Нет совпадений с данными в базе.');
+        // Если значение не найдено, показываем предупреждение
+        alert("Данные не найдены в списке.");
       }
+    }).catch((error) => {
+      console.error("Ошибка при загрузке данных:", error);
+      alert("Произошла ошибка при проверке данных. Попробуйте позже.");
     });
   } else {
-    alert('Пожалуйста, введите значение для поиска.');
+    alert("Введите значение для проверки.");
   }
 };
