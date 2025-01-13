@@ -35,21 +35,22 @@ function loadData(callback) {
 function updateTable(data) {
   const tableBody = document.getElementById('table-body');
   tableBody.innerHTML = '';  // Очистить таблицу
+
+  // Для каждого участника создаем строку
   data.forEach((item, index) => {
     const row = document.createElement('tr');
-    const numberCell = document.createElement('td');
+    
+    // Столбец с ФИО
     const nameCell = document.createElement('td');
+    nameCell.textContent = item;  // ФИО участника
+    
+    // Столбец с кнопкой Удалить
     const deleteCell = document.createElement('td');
-    
-    numberCell.textContent = index + 1;  // Номер участника
-    nameCell.textContent = item;         // ФИО участника
-    
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Удалить';
-    deleteButton.onclick = () => deleteData(index);
+    deleteButton.onclick = () => deleteData(index);  // Удаление данных по индексу
     
     deleteCell.appendChild(deleteButton);
-    row.appendChild(numberCell);
     row.appendChild(nameCell);
     row.appendChild(deleteCell);
     tableBody.appendChild(row);
