@@ -1,55 +1,80 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const inputField = document.getElementById("inputField");
-    const addButton = document.getElementById("addButton");
-    const tableBody = document.getElementById("tableBody");
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
-    let data = JSON.parse(localStorage.getItem("tableData")) || []; // Загружаем данные из LocalStorage
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDPZfsVqCG1kbI8d2ev74gWeHnorpD2lkM",
+  authDomain: "dynamictableproject.firebaseapp.com",
+  projectId: "dynamictableproject",
+  storageBucket: "dynamictableproject.firebasestorage.app",
+  messagingSenderId: "833661205938",
+  appId: "1:833661205938:web:fa757d8070329d2dc3c8ab",
+  measurementId: "G-T419JQJQVP"
+};
 
-    // Функция для сохранения данных в LocalStorage
-    const saveToLocalStorage = () => {
-        localStorage.setItem("tableData", JSON.stringify(data));
-    };
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-    // Функция для отображения данных в таблице
-    const renderTable = () => {
-        tableBody.innerHTML = ""; // Очищаем таблицу
-        data.forEach((item, index) => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${item}</td>
-                <td><button class="deleteButton">Удалить</button></td>
-            `;
+// Сохранение данных в Firebase
+function saveData(data) {
+  set(ref(db, 'tableData'), data);
+}
 
-            // Обработчик удаления строки
-            const deleteButton = row.querySelector(".deleteButton");
-            deleteButton.addEventListener("click", () => {
-                data.splice(index, 1); // Удаляем элемент из массива
-                saveToLocalStorage(); // Сохраняем изменения
-                renderTable(); // Обновляем таблицу
-            });
+// Загрузка данных из Firebase
+function loadData() {
+  const tableRef = ref(db, 'tableData');
+  onValue(tableRef, (snapshot) => {
+    const data = snapshot.val() || [];
+    updateTable(data);
+  });
+}
 
-            tableBody.appendChild(row);
-        });
-    };
+// Обновление таблицы
+function updateTable(data) {
+  const tableBody = document.getElementById('table-body');
+  tableBody.innerHTML = '';  // Очистить таблицу
+  data.forEach((item, index) => {
+    const row = document.createElement('tr');
+    const cell = document.createElement('td');
+    const deleteCell = document.createElement('td');
+    
+    cell.textContent = item;
+    
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.onclick = () => deleteData(index);
+    
+    deleteCell.appendChild(deleteButton);
+    row.appendChild(cell);
+    row.appendChild(deleteCell);
+    tableBody.appendChild(row);
+  });
+}
 
-    // Обработчик добавления строки
-    addButton.addEventListener("click", () => {
-        const inputValue = inputField.value.trim();
+// Удаление данных
+function deleteData(index) {
+  const tableRef = ref(db, 'tableData');
+  onValue(tableRef, (snapshot) => {
+    const data = snapshot.val();
+    data.splice(index, 1);
+    saveData(data);  // Сохранить обновлённый список
+  });
+}
 
-        if (inputValue === "") {
-            alert("Пожалуйста, введите значение!");
-            return;
-        }
-
-        data.push(inputValue); // Добавляем значение в массив
-        saveToLocalStorage(); // Сохраняем изменения
-        renderTable(); // Обновляем таблицу
-
-        inputField.value = ""; // Очищаем поле ввода
-        inputField.focus(); // Ставим фокус на поле ввода
+// Добавление нового значения
+document.getElementById('addButton').onclick = () => {
+  const newData = document.getElementById('newData').value.trim();
+  if (newData) {
+    const tableRef = ref(db, 'tableData');
+    onValue(tableRef, (snapshot) => {
+      const data = snapshot.val() || [];
+      data.push(newData);
+      saveData(data);  // Сохранить новые данные
     });
+    document.getElementById('newData').value = '';  // Очистить поле ввода
+  }
+};
 
-    // Инициализация таблицы при загрузке страницы
-    renderTable();
-});
+// Загрузить данные при старте
+loadData();
