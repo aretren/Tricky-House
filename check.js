@@ -18,25 +18,32 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // Обработка кнопки проверки
-document.getElementById('checkButton').onclick = () => {
-  const inputValue = document.getElementById('checkData').value.trim();
-  
+document.getElementById('checkButton').onclick = async () => {
+  const inputValue = document.getElementById('checkData').value.trim(); // Считываем значение из поля
+
   if (inputValue) {
-    // Загружаем данные из базы
-    const tableRef = ref(db, 'tableData');
-    get(tableRef).then((snapshot) => {
-      const data = snapshot.val() || []; // Получаем данные или пустой массив
-      if (data.includes(inputValue)) {
-        // Если значение найдено, перенаправляем на страницу
-        window.location.href = "https://opros.com";
+    try {
+      // Загружаем данные из базы
+      const tableRef = ref(db, 'tableData');
+      const snapshot = await get(tableRef);
+
+      if (snapshot.exists()) {
+        const data = snapshot.val(); // Получаем данные
+        const values = Object.values(data); // Преобразуем объект в массив значений
+
+        if (values.includes(inputValue)) {
+          // Если значение найдено, перенаправляем на страницу
+          window.location.href = "https://opros.com";
+        } else {
+          alert("Данные не найдены в списке.");
+        }
       } else {
-        // Если значение не найдено, показываем предупреждение
-        alert("Данные не найдены в списке.");
+        alert("Список пуст.");
       }
-    }).catch((error) => {
+    } catch (error) {
       console.error("Ошибка при загрузке данных:", error);
       alert("Произошла ошибка при проверке данных. Попробуйте позже.");
-    });
+    }
   } else {
     alert("Введите значение для проверки.");
   }
