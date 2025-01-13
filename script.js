@@ -1,10 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
-// Firebase Configuration
+// Ваши данные Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDPZfsVqCG1kbI8d2ev74gWeHnorpD2lkM",
   authDomain: "dynamictableproject.firebaseapp.com",
+  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app", // Обновлённый URL базы данных
   projectId: "dynamictableproject",
   storageBucket: "dynamictableproject.firebasestorage.app",
   messagingSenderId: "833661205938",
@@ -12,7 +13,7 @@ const firebaseConfig = {
   measurementId: "G-T419JQJQVP"
 };
 
-// Initialize Firebase
+// Инициализация Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
