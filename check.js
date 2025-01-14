@@ -1,11 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 // Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDPZfsVqCG1kbI8d2ev74gWeHnorpD2lkM",
   authDomain: "dynamictableproject.firebaseapp.com",
-  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app", // Убедитесь, что адрес корректен
+  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "dynamictableproject",
   storageBucket: "dynamictableproject.firebasestorage.app",
   messagingSenderId: "833661205938",
@@ -17,51 +17,54 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Обработка кнопки проверки
-document.getElementById("checkButton").onclick = async () => {
-  const inputValue = document.getElementById("checkData").value.trim();
+// DOM-элементы
+const searchField = document.getElementById("searchField");
+const checkButton = document.getElementById("checkButton");
+const nominationSelect = document.getElementById("nominationSelect");
 
-  if (inputValue) {
-    try {
-      // Разделяем введённое значение на имя и фамилию
-      const [firstPart, secondPart] = inputValue.split(" ");
-      if (!firstPart || !secondPart) {
-        alert("Введите данные в формате 'Имя Фамилия' или 'Фамилия Имя'.");
-        return;
-      }
-
-      const tableRef = ref(db, "tableData");
-      const snapshot = await get(tableRef);
-
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        const values = Object.values(data).map((entry) => entry.name); // Получаем только имена из базы
-
-        // Формируем оба возможных варианта ввода
-        const normalFormat = `${firstPart} ${secondPart}`;
-        const reversedFormat = `${secondPart} ${firstPart}`;
-
-        // Проверяем оба варианта
-        const matchedName = values.find(
-          (name) => name === normalFormat || name === reversedFormat
-        );
-
-        if (matchedName) {
-          // Если совпадение найдено, перенаправляем с передачей имени в URL
-          window.location.href = `vote.html?name=${encodeURIComponent(
-            matchedName
-          )}`;
-        } else {
-          alert("Данные не найдены в списке.");
-        }
-      } else {
-        alert("Список пуст.");
-      }
-    } catch (error) {
-      console.error("Ошибка при загрузке данных:", error);
-      alert("Произошла ошибка при проверке данных. Попробуйте позже.");
-    }
-  } else {
-    alert("Введите значение для проверки.");
+// Загрузка номинаций
+const nominationRef = ref(db, "nominations");
+onValue(nominationRef, (snapshot) => {
+  const data = snapshot.val();
+  if (data) {
+    Object.values(data).forEach((nomination) => {
+      const option = document.createElement("option");
+      option.value = nomination;
+      option.textContent = nomination;
+      nominationSelect.appendChild(option);
+    });
   }
+});
+
+// Проверка участника и переход
+checkButton.onclick = () => {
+  const inputValue = searchField.value.trim();
+  const selectedNomination = nominationSelect.value;
+
+  if (!inputValue) {
+    alert("Введите ФИО.");
+    return;
+  }
+
+  if (!selectedNomination) {
+    alert("Выберите номинацию.");
+    return;
+  }
+
+  // Проверяем участника в базе
+  const tableRef = ref(db, "tableData");
+  get(tableRef).then((snapshot) => {
+    const data = snapshot.val() || {};
+    const participant = Object.values(data).find((p) => p.name === inputValue);
+
+    if (participant) {
+      // Переход на страницу голосования с передачей ФИО и номинации
+      window.location.href = `vote.html?name=${encodeURIComponent(inputValue)}&nomination=${encodeURIComponent(selectedNomination)}`;
+    } else {
+      alert("Участник не найден.");
+    }
+  }).catch((error) => {
+    console.error("Ошибка при проверке:", error);
+    alert("Произошла ошибка. Попробуйте снова.");
+  });
 };
