@@ -25,23 +25,27 @@ const addButton = document.getElementById("addButton");
 const tableBody = document.getElementById("table-body");
 const nominationInputs = document.getElementById("nominationInputs");
 
-// Загрузка номинаций
+// Загрузка списка номинаций
 onValue(nominationRef, (snapshot) => {
   nominationInputs.innerHTML = ""; // Очищаем существующие элементы
   const data = snapshot.val();
   if (data) {
     Object.values(data).forEach((nomination) => {
+      const wrapper = document.createElement("div"); // Контейнер для номинации
+      wrapper.className = "nomination-wrapper";
+
       const label = document.createElement("label");
       label.textContent = nomination;
 
       const input = document.createElement("input");
       input.type = "number";
       input.min = "0";
-      input.value = "1"; // По умолчанию один голос
+      input.value = "1"; // По умолчанию 1 голос
       input.dataset.nomination = nomination;
 
       label.appendChild(input);
-      nominationInputs.appendChild(label);
+      wrapper.appendChild(label);
+      nominationInputs.appendChild(wrapper);
     });
   } else {
     nominationInputs.innerHTML = "<p>Нет доступных номинаций.</p>";
