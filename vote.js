@@ -60,16 +60,19 @@ async function castVote(contestantKey, contestantName) {
     const participantsSnapshot = await get(tableDataRef);
     const participants = participantsSnapshot.val();
 
-    const votingParticipant = Object.values(participants).find(
-      (p) => p.name === participantName
+    // Находим запись голосующего участника по имени
+    const participantEntry = Object.entries(participants).find(
+      ([_, value]) => value.name === participantName
     );
 
-    if (!votingParticipant) {
+    if (!participantEntry) {
       alert("Вы не зарегистрированы.");
       return;
     }
 
-    if (votingParticipant.score <= 0) {
+    const [participantKey, participantData] = participantEntry;
+
+    if (participantData.score <= 0) {
       alert("У вас недостаточно баллов для голосования.");
       return;
     }
@@ -90,11 +93,8 @@ async function castVote(contestantKey, contestantName) {
     });
 
     // Уменьшаем балл у голосующего участника
-    const participantKey = Object.keys(participants).find(
-      (key) => participants[key].name === participantName
-    );
     await update(ref(db, `tableData/${participantKey}`), {
-      score: votingParticipant.score - 1
+      score: participantData.score - 1
     });
 
     alert(`Вы успешно проголосовали за ${contestantName}!`);
