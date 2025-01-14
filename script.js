@@ -1,11 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
-// Ваши данные Firebase
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDPZfsVqCG1kbI8d2ev74gWeHnorpD2lkM",
   authDomain: "dynamictableproject.firebaseapp.com",
-  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app", // URL вашей Realtime Database
+  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app", // Убедитесь, что адрес корректен
   projectId: "dynamictableproject",
   storageBucket: "dynamictableproject.firebasestorage.app",
   messagingSenderId: "833661205938",
@@ -34,18 +34,36 @@ function updateTable(data) {
 
     // Ячейка с именем
     const nameCell = document.createElement("td");
-    nameCell.textContent = value;
+    nameCell.textContent = value.name;
     row.appendChild(nameCell);
 
-    // Ячейка с кнопкой "Удалить"
-    const deleteCell = document.createElement("td");
+    // Ячейка с баллом
+    const scoreCell = document.createElement("td");
+    scoreCell.textContent = value.score;
+    row.appendChild(scoreCell);
+
+    // Ячейка с действиями
+    const actionsCell = document.createElement("td");
+
+    // Кнопка восстановления балла
+    const restoreButton = document.createElement("button");
+    restoreButton.textContent = "Восстановить балл";
+    restoreButton.onclick = () => {
+      if (value.score === 0) {
+        update(ref(db, `tableData/${key}`), { score: 1 }); // Устанавливаем балл = 1
+      } else {
+        alert("Баллы уже восстановлены!");
+      }
+    };
+    actionsCell.appendChild(restoreButton);
+
+    // Кнопка удаления участника
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Удалить";
-    deleteButton.classList.add("delete-button");
-    deleteButton.onclick = () => remove(ref(db, `tableData/${key}`)); // Удаление из Firebase
-    deleteCell.appendChild(deleteButton);
-    row.appendChild(deleteCell);
+    deleteButton.onclick = () => remove(ref(db, `tableData/${key}`)); // Удаление участника
+    actionsCell.appendChild(deleteButton);
 
+    row.appendChild(actionsCell);
     tableBody.appendChild(row);
   });
 }
@@ -60,8 +78,8 @@ onValue(tableRef, (snapshot) => {
 addButton.onclick = () => {
   const newData = inputField.value.trim();
   if (newData) {
-    // Добавляем новые данные в базу
-    push(tableRef, newData)
+    // Добавляем нового участника с баллом = 0
+    push(tableRef, { name: newData, score: 0 })
       .then(() => {
         inputField.value = ""; // Очищаем поле ввода после добавления
       })
