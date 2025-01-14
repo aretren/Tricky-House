@@ -17,6 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const secondListRef = ref(db, "secondTableData");
+const tableDataRef = ref(db, "tableData"); // Участники с баллами
 
 // Получаем имя участника из URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -55,19 +56,45 @@ function displayContestants(data) {
 // Функция для голосования
 async function castVote(contestantKey, contestantName) {
   try {
-    // Получаем данные конкурсантов
-    const snapshot = await get(secondListRef);
-    const data = snapshot.val();
+    // Получаем данные голосующего участника
+    const participantsSnapshot = await get(tableDataRef);
+    const participants = participantsSnapshot.val();
 
-    if (!data[contestantKey]) {
+    const votingParticipant = Object.values(participants).find(
+      (p) => p.name === participantName
+    );
+
+    if (!votingParticipant) {
+      alert("Вы не зарегистрированы.");
+      return;
+    }
+
+    if (votingParticipant.score <= 0) {
+      alert("У вас недостаточно баллов для голосования.");
+      return;
+    }
+
+    // Получаем данные конкурсантов
+    const contestantsSnapshot = await get(secondListRef);
+    const contestants = contestantsSnapshot.val();
+
+    if (!contestants[contestantKey]) {
       alert("Конкурсант не найден.");
       return;
     }
 
-    // Увеличиваем количество голосов за выбранного конкурсанта
-    const currentVotes = data[contestantKey].votes || 0;
+    // Увеличиваем количество голосов у конкурсанта
+    const currentVotes = contestants[contestantKey].votes || 0;
     await update(ref(db, `secondTableData/${contestantKey}`), {
       votes: currentVotes + 1
+    });
+
+    // Уменьшаем балл у голосующего участника
+    const participantKey = Object.keys(participants).find(
+      (key) => participants[key].name === participantName
+    );
+    await update(ref(db, `tableData/${participantKey}`), {
+      score: votingParticipant.score - 1
     });
 
     alert(`Вы успешно проголосовали за ${contestantName}!`);
