@@ -39,9 +39,9 @@ function displayContestants(data) {
   Object.entries(data).forEach(([key, value]) => {
     const listItem = document.createElement("li");
 
-    // Отображаем имя конкурсанта и текущие голоса
+    // Отображаем имя конкурсанта
     const contestantName = document.createElement("span");
-    contestantName.textContent = `${value.name} (Баллы: ${value.votes || 0})`;
+    contestantName.textContent = value.name;
 
     const voteButton = document.createElement("button");
     voteButton.textContent = "Проголосовать";
@@ -98,7 +98,7 @@ async function castVote(contestantKey, contestantName) {
     });
 
     alert(`Вы успешно проголосовали за ${contestantName}!`);
-    location.reload(); // Перезагружаем страницу, чтобы обновить голоса
+    location.reload(); // Перезагружаем страницу, чтобы обновить данные
   } catch (error) {
     console.error("Ошибка при голосовании:", error);
     alert("Произошла ошибка. Попробуйте снова.");
