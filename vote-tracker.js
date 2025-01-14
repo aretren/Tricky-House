@@ -25,6 +25,9 @@ const contestantList = document.getElementById("contestantList");
 function displayContestants(data) {
   contestantList.innerHTML = ""; // Очищаем список перед обновлением
 
+  const votesArray = Object.values(data).map((value) => value.votes || 0);
+  const maxVotes = Math.max(...votesArray) || 1; // Максимальное количество голосов
+
   Object.entries(data).forEach(([key, value]) => {
     const listItem = document.createElement("li");
 
@@ -33,15 +36,20 @@ function displayContestants(data) {
     contestantName.textContent = value.name;
     listItem.appendChild(contestantName);
 
-    // Прогресс-бар
+    // Прогресс-бар контейнер
     const progressBarContainer = document.createElement("div");
     progressBarContainer.className = "progress-bar-container";
 
+    // Прогресс-бар
     const progressBar = document.createElement("div");
     progressBar.className = "progress-bar";
-    const votes = value.votes || 0; // Если голосов нет, показываем 0
-    progressBar.style.width = `${votes * 10}px`; // Ширина шкалы
-    progressBar.textContent = `${votes} голосов`;
+
+    const votes = value.votes || 0;
+    const relativeWidth = (votes / maxVotes) * 100; // Динамическая ширина в процентах
+    progressBar.style.width = `${relativeWidth}%`;
+
+    // Число голосов внутри прогресс-бара
+    progressBar.textContent = votes;
 
     progressBarContainer.appendChild(progressBar);
     listItem.appendChild(progressBarContainer);
