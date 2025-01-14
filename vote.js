@@ -5,7 +5,7 @@ import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasej
 const firebaseConfig = {
   apiKey: "AIzaSyDPZfsVqCG1kbI8d2ev74gWeHnorpD2lkM",
   authDomain: "dynamictableproject.firebaseapp.com",
-  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app", // Убедитесь, что адрес корректен
+  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "dynamictableproject",
   storageBucket: "dynamictableproject.firebasestorage.app",
   messagingSenderId: "833661205938",
@@ -38,6 +38,7 @@ function displayContestants(data) {
   Object.entries(data).forEach(([key, value]) => {
     const listItem = document.createElement("li");
 
+    // Отображаем имя конкурсанта и текущие голоса
     const contestantName = document.createElement("span");
     contestantName.textContent = `${value.name} (Баллы: ${value.votes || 0})`;
 
