@@ -25,22 +25,30 @@ const addButton = document.getElementById("addButton");
 const tableBody = document.getElementById("table-body");
 const nominationInputs = document.getElementById("nominationInputs");
 
-// Загрузка номинаций
+// Загрузка списка номинаций
 onValue(nominationRef, (snapshot) => {
   nominationInputs.innerHTML = ""; // Очищаем список номинаций
   const data = snapshot.val();
   if (data) {
-    Object.values(data).forEach((nomination) => {
-      const label = document.createElement("label");
-      label.textContent = nomination;
+    Object.entries(data).forEach(([key, nomination]) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "nomination-wrapper";
 
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
+      checkbox.id = `nomination-${key}`;
       checkbox.value = nomination;
 
-      label.appendChild(checkbox);
-      nominationInputs.appendChild(label);
+      const label = document.createElement("label");
+      label.htmlFor = `nomination-${key}`;
+      label.textContent = nomination;
+
+      wrapper.appendChild(checkbox);
+      wrapper.appendChild(label);
+      nominationInputs.appendChild(wrapper);
     });
+  } else {
+    nominationInputs.innerHTML = "<p>Нет доступных номинаций.</p>";
   }
 });
 
@@ -52,21 +60,21 @@ addButton.onclick = () => {
     return;
   }
 
-  const nominations = Array.from(
-    nominationInputs.querySelectorAll("input:checked")
+  const selectedNominations = Array.from(
+    nominationInputs.querySelectorAll("input[type='checkbox']:checked")
   ).map((checkbox) => checkbox.value);
 
-  if (nominations.length === 0) {
+  if (selectedNominations.length === 0) {
     alert("Выберите хотя бы одну номинацию.");
     return;
   }
 
-  const votesByNomination = nominations.reduce((acc, nomination) => {
+  const votesByNomination = selectedNominations.reduce((acc, nomination) => {
     acc[nomination] = 0; // У каждого конкурсанта начальное количество голосов 0
     return acc;
   }, {});
 
-  push(secondListRef, { name, nominations, votesByNomination })
+  push(secondListRef, { name, nominations: selectedNominations, votesByNomination })
     .then(() => {
       inputField.value = ""; // Очистка поля ввода
       nominationInputs.querySelectorAll("input").forEach((input) => (input.checked = false));
