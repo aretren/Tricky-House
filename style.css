@@ -201,3 +201,43 @@ input[type="number"]:focus {
     box-shadow: 0 0 8px rgba(106, 17, 203, 0.5); /* Подсветка при фокусе */
     background: white; /* Чисто белый фон при фокусе */
 }
+
+/* Обёртка для номинации */
+.nomination-wrapper {
+    margin-bottom: 10px; /* Отступ между номинациями */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 400px; /* Ограничение ширины списка */
+}
+
+/* Стиль для меток номинаций */
+.nomination-wrapper label {
+    font-size: 16px;
+    color: white;
+    flex-grow: 1;
+    margin-right: 10px; /* Отступ между текстом и полем ввода */
+}
+
+/* Поле для ввода голосов */
+.nomination-wrapper input[type="number"] {
+    width: 60px; /* Узкое поле для чисел */
+    padding: 5px 10px;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Поле для ввода голосов: фокус */
+.nomination-wrapper input[type="number"]:focus {
+    border: 2px solid #6a11cb;
+    box-shadow: 0 0 8px rgba(106, 17, 203, 0.5);
+    background: white;
+}
