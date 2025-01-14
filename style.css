@@ -1,51 +1,110 @@
+/* Общий стиль для страницы */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
-    background-color: #f4f4f9;
-}
-
-h1 {
-    color: #333;
-}
-
-input, button {
-    padding: 10px;
-    margin: 10px;
-    font-size: 16px;
-}
-
-input {
-    width: 200px;
-}
-
-button {
-    background-color: #4CAF50;
+    padding: 0;
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Градиентный фон */
     color: white;
-    border: none;
-    cursor: pointer;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 }
 
-button:hover {
-    background-color: #45a049;
-}
-
-table {
-    width: 100%;
+/* Заголовок */
+h1, h2 {
     margin-top: 20px;
-    border-collapse: collapse;
+    text-align: center;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
+/* Поле ввода */
+input[type="text"] {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px 15px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 25px; /* Округлённые края */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+    outline: none;
 }
 
+/* Поле ввода: фокус */
+input[type="text"]:focus {
+    border: 2px solid #2575fc; /* Синий акцент при фокусе */
+    box-shadow: 0 0 10px rgba(37, 117, 252, 0.5);
+}
+
+/* Кнопки */
 button {
-    background-color: #f44336;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 25px; /* Округлённые края */
+    background: linear-gradient(135deg, #2575fc, #6a11cb); /* Сине-фиолетовый градиент */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
 }
 
+/* Кнопки: наведение */
 button:hover {
-    background-color: #da190b;
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Обратный градиент при наведении */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Кнопки: активное состояние */
+button:active {
+    transform: scale(0.95); /* Лёгкий эффект нажатия */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Список */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 600px;
+}
+
+/* Элементы списка */
+li {
+    background: rgba(255, 255, 255, 0.1); /* Прозрачный белый фон */
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 15px; /* Округлённые края */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Текст внутри списка */
+li span {
+    font-size: 16px;
+    flex-grow: 1;
+}
+
+/* Кнопки внутри списка */
+li button {
+    margin-left: 10px;
+    padding: 5px 15px;
+    font-size: 14px;
+}
+
+/* Приветственное сообщение */
+#welcomeMessage {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
