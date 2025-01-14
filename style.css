@@ -178,3 +178,26 @@ table tr:nth-child(even) {
 table tr:hover {
     background: rgba(255, 255, 255, 0.1); /* Подсветка строки при наведении */
 }
+
+/* Поле ввода голосов */
+input[type="number"] {
+    width: 60%; /* Уже, чем поле для ФИО */
+    max-width: 300px;
+    padding: 8px 15px; /* Немного уменьшенные отступы */
+    margin: 10px 5px; /* Больше места между полями */
+    border: none;
+    border-radius: 20px; /* Округлённые края */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Лёгкая тень */
+    font-size: 14px; /* Меньший шрифт */
+    outline: none;
+    background: rgba(255, 255, 255, 0.9); /* Светлый фон */
+    color: #333; /* Тёмный текст */
+    transition: all 0.3s ease; /* Плавный переход для фокуса */
+}
+
+/* Поле ввода голосов: фокус */
+input[type="number"]:focus {
+    border: 2px solid #6a11cb; /* Акцент на фокусе */
+    box-shadow: 0 0 8px rgba(106, 17, 203, 0.5); /* Подсветка при фокусе */
+    background: white; /* Чисто белый фон при фокусе */
+}
