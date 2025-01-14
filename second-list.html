@@ -7,15 +7,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Управление списком конкурсантов</h1>
+    <h1>Управление вторым списком</h1>
     
     <input type="text" id="newData" placeholder="Введите имя участника">
+    <h2>Выберите номинации</h2>
+    <div id="nominationCheckboxes"></div>
     <button id="addButton">Добавить</button>
     
     <table id="dataTable">
         <thead>
             <tr>
                 <th>Имя</th>
+                <th>Номинации</th>
                 <th>Голоса</th>
                 <th>Удалить</th>
             </tr>
@@ -25,8 +28,6 @@
         </tbody>
     </table>
 
-    <button id="toIndex" onclick="window.location.href='index.html'">Перейти к списку голосующих</button>
-    
     <script type="module" src="second-list.js"></script>
 </body>
 </html>
