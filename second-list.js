@@ -5,7 +5,7 @@ import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com
 const firebaseConfig = {
   apiKey: "AIzaSyDPZfsVqCG1kbI8d2ev74gWeHnorpD2lkM",
   authDomain: "dynamictableproject.firebaseapp.com",
-  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app", // Убедитесь, что адрес корректен
+  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "dynamictableproject",
   storageBucket: "dynamictableproject.firebasestorage.app",
   messagingSenderId: "833661205938",
@@ -16,7 +16,7 @@ const firebaseConfig = {
 // Инициализация Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const tableRef = ref(db, "secondTableData"); // Отдельный путь в Firebase
+const secondListRef = ref(db, "secondTableData");
 
 // DOM-элементы
 const inputField = document.getElementById("newData");
@@ -32,16 +32,20 @@ function updateTable(data) {
   Object.entries(data).forEach(([key, value]) => {
     const row = document.createElement("tr");
 
-    // Ячейка с элементом
+    // Ячейка с именем
     const nameCell = document.createElement("td");
-    nameCell.textContent = value;
+    nameCell.textContent = value.name;
     row.appendChild(nameCell);
 
-    // Ячейка с кнопкой "Удалить"
+    // Ячейка с количеством голосов
+    const votesCell = document.createElement("td");
+    votesCell.textContent = value.votes || 0; // Если голосов нет, отображаем 0
+    row.appendChild(votesCell);
+
+    // Ячейка с кнопкой удаления
     const deleteCell = document.createElement("td");
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Удалить";
-    deleteButton.classList.add("delete-button");
     deleteButton.onclick = () => remove(ref(db, `secondTableData/${key}`)); // Удаление из Firebase
     deleteCell.appendChild(deleteButton);
     row.appendChild(deleteCell);
@@ -51,7 +55,7 @@ function updateTable(data) {
 }
 
 // Загрузка данных из базы в реальном времени
-onValue(tableRef, (snapshot) => {
+onValue(secondListRef, (snapshot) => {
   const data = snapshot.val() || {};
   updateTable(data); // Обновление таблицы
 });
@@ -60,8 +64,8 @@ onValue(tableRef, (snapshot) => {
 addButton.onclick = () => {
   const newData = inputField.value.trim();
   if (newData) {
-    // Добавляем новые данные в базу
-    push(tableRef, newData)
+    // Добавляем нового участника с голосами = 0
+    push(secondListRef, { name: newData, votes: 0 })
       .then(() => {
         inputField.value = ""; // Очищаем поле ввода после добавления
       })
@@ -70,6 +74,6 @@ addButton.onclick = () => {
         alert("Не удалось добавить данные. Попробуйте позже.");
       });
   } else {
-    alert("Введите значение перед добавлением.");
+    alert("Введите имя перед добавлением.");
   }
 };
