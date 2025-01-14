@@ -1,11 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
-// Ваши данные Firebase
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDPZfsVqCG1kbI8d2ev74gWeHnorpD2lkM",
   authDomain: "dynamictableproject.firebaseapp.com",
-  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app", // URL вашей Realtime Database
+  databaseURL: "https://dynamictableproject-default-rtdb.asia-southeast1.firebasedatabase.app", // Убедитесь, что адрес корректен
   projectId: "dynamictableproject",
   storageBucket: "dynamictableproject.firebasestorage.app",
   messagingSenderId: "833661205938",
@@ -18,22 +18,33 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // Обработка кнопки проверки
-document.getElementById('checkButton').onclick = async () => {
-  const inputValue = document.getElementById('checkData').value.trim(); // Считываем значение из поля
+document.getElementById("checkButton").onclick = async () => {
+  const inputValue = document.getElementById("checkData").value.trim();
 
   if (inputValue) {
     try {
-      // Загружаем данные из базы
-      const tableRef = ref(db, 'tableData');
+      // Разделяем введённое значение на имя и фамилию
+      const [firstPart, secondPart] = inputValue.split(" ");
+      if (!firstPart || !secondPart) {
+        alert("Введите данные в формате 'Имя Фамилия' или 'Фамилия Имя'.");
+        return;
+      }
+
+      const tableRef = ref(db, "tableData");
       const snapshot = await get(tableRef);
 
       if (snapshot.exists()) {
-        const data = snapshot.val(); // Получаем данные
-        const values = Object.values(data); // Преобразуем объект в массив значений
+        const data = snapshot.val();
+        const values = Object.values(data).map((entry) => entry.name); // Получаем только имена из базы
 
-        if (values.includes(inputValue)) {
-          // Если значение найдено, перенаправляем на страницу
-          window.location.href = "https://vk.com/video-11254710_456241594?ysclid=m5v5kpfnnk179110829";
+        // Формируем оба возможных варианта ввода
+        const normalFormat = `${firstPart} ${secondPart}`;
+        const reversedFormat = `${secondPart} ${firstPart}`;
+
+        // Проверяем оба варианта
+        if (values.includes(normalFormat) || values.includes(reversedFormat)) {
+          // Если совпадение найдено, перенаправляем
+          window.location.href = "https://opros.com";
         } else {
           alert("Данные не найдены в списке.");
         }
