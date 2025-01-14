@@ -17,63 +17,94 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const secondListRef = ref(db, "secondTableData");
+const nominationRef = ref(db, "nominations");
 
 // DOM-элементы
 const inputField = document.getElementById("newData");
 const addButton = document.getElementById("addButton");
 const tableBody = document.getElementById("table-body");
+const nominationCheckboxes = document.getElementById("nominationCheckboxes");
 
-// Функция для обновления таблицы
-function updateTable(data) {
-  // Очистка текущей таблицы
-  tableBody.innerHTML = "";
-
-  // Заполнение таблицы новыми данными
-  Object.entries(data).forEach(([key, value]) => {
-    const row = document.createElement("tr");
-
-    // Ячейка с именем
-    const nameCell = document.createElement("td");
-    nameCell.textContent = value.name;
-    row.appendChild(nameCell);
-
-    // Ячейка с количеством голосов
-    const votesCell = document.createElement("td");
-    votesCell.textContent = value.votes || 0; // Если голосов нет, отображаем 0
-    row.appendChild(votesCell);
-
-    // Ячейка с кнопкой удаления
-    const deleteCell = document.createElement("td");
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "Удалить";
-    deleteButton.onclick = () => remove(ref(db, `secondTableData/${key}`)); // Удаление из Firebase
-    deleteCell.appendChild(deleteButton);
-    row.appendChild(deleteCell);
-
-    tableBody.appendChild(row);
-  });
-}
-
-// Загрузка данных из базы в реальном времени
-onValue(secondListRef, (snapshot) => {
-  const data = snapshot.val() || {};
-  updateTable(data); // Обновление таблицы
+// Загрузка списка номинаций
+onValue(nominationRef, (snapshot) => {
+  nominationCheckboxes.innerHTML = ""; // Очищаем чекбоксы
+  const data = snapshot.val();
+  if (data) {
+    Object.values(data).forEach((nomination) => {
+      const label = document.createElement("label");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.value = nomination;
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(nomination));
+      nominationCheckboxes.appendChild(label);
+    });
+  } else {
+    nominationCheckboxes.innerHTML = "<p>Нет доступных номинаций.</p>";
+  }
 });
 
-// Обработка кнопки добавления
+// Функция для добавления участника
 addButton.onclick = () => {
   const newData = inputField.value.trim();
   if (newData) {
-    // Добавляем нового участника с голосами = 0
-    push(secondListRef, { name: newData, votes: 0 })
+    // Собираем выбранные номинации
+    const selectedNominations = Array.from(
+      nominationCheckboxes.querySelectorAll("input:checked")
+    ).map((checkbox) => checkbox.value);
+
+    if (selectedNominations.length === 0) {
+      alert("Выберите хотя бы одну номинацию.");
+      return;
+    }
+
+    push(secondListRef, { name: newData, nominations: selectedNominations, votes: 0 })
       .then(() => {
-        inputField.value = ""; // Очищаем поле ввода после добавления
+        inputField.value = ""; // Очищаем поле ввода
       })
       .catch((error) => {
-        console.error("Ошибка при добавлении данных:", error);
-        alert("Не удалось добавить данные. Попробуйте позже.");
+        console.error("Ошибка при добавлении участника:", error);
+        alert("Не удалось добавить участника. Попробуйте снова.");
       });
   } else {
-    alert("Введите имя перед добавлением.");
+    alert("Введите имя участника.");
   }
 };
+
+// Обновление таблицы участников
+onValue(secondListRef, (snapshot) => {
+  tableBody.innerHTML = ""; // Очищаем таблицу
+  const data = snapshot.val();
+  if (data) {
+    Object.entries(data).forEach(([key, value]) => {
+      const row = document.createElement("tr");
+
+      // Имя участника
+      const nameCell = document.createElement("td");
+      nameCell.textContent = value.name;
+      row.appendChild(nameCell);
+
+      // Номинации участника
+      const nominationsCell = document.createElement("td");
+      nominationsCell.textContent = value.nominations.join(", ");
+      row.appendChild(nominationsCell);
+
+      // Голоса участника
+      const votesCell = document.createElement("td");
+      votesCell.textContent = value.votes || 0;
+      row.appendChild(votesCell);
+
+      // Кнопка удаления
+      const deleteCell = document.createElement("td");
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Удалить";
+      deleteButton.onclick = () => remove(ref(db, `secondTableData/${key}`));
+      deleteCell.appendChild(deleteButton);
+      row.appendChild(deleteCell);
+
+      tableBody.appendChild(row);
+    });
+  } else {
+    tableBody.innerHTML = "<tr><td colspan='4'>Список пуст.</td></tr>";
+  }
+});
