@@ -42,9 +42,15 @@ document.getElementById("checkButton").onclick = async () => {
         const reversedFormat = `${secondPart} ${firstPart}`;
 
         // Проверяем оба варианта
-        if (values.includes(normalFormat) || values.includes(reversedFormat)) {
-          // Если совпадение найдено, перенаправляем
-          window.location.href = "https://opros.com";
+        const matchedName = values.find(
+          (name) => name === normalFormat || name === reversedFormat
+        );
+
+        if (matchedName) {
+          // Если совпадение найдено, перенаправляем с передачей имени в URL
+          window.location.href = `vote.html?name=${encodeURIComponent(
+            matchedName
+          )}`;
         } else {
           alert("Данные не найдены в списке.");
         }
