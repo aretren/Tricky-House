@@ -98,7 +98,16 @@ onValue(tableDataRef, (snapshot) => {
 
       // Голоса по номинациям
       const votesCell = document.createElement("td");
-      votesCell.textContent = Object.entries(value.votes)
+
+      // Получение номинаций из базы в порядке их появления
+      const sortedVotes = Object.entries(value.votes).sort(([nom1], [nom2]) => {
+        const nominationOrder = Object.keys(Object.values(snapshot.val())[0].votes);
+        const index1 = nominationOrder.indexOf(nom1);
+        const index2 = nominationOrder.indexOf(nom2);
+        return index1 - index2;
+      });
+
+      votesCell.textContent = sortedVotes
         .map(([nomination, count]) => `${nomination}: ${count}`)
         .join(", ");
       row.appendChild(votesCell);
