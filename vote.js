@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -16,101 +16,49 @@ const firebaseConfig = {
 // Инициализация Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const secondListRef = ref(db, "secondTableData");
-const tableDataRef = ref(db, "tableData"); // Участники с баллами
 
-// Получаем имя участника из URL
+// Получение параметров URL
 const urlParams = new URLSearchParams(window.location.search);
 const participantName = urlParams.get("name");
+const selectedNomination = urlParams.get("nomination");
 
-if (!participantName) {
-  alert("Имя участника не передано. Возврат на главную.");
+if (!participantName || !selectedNomination) {
+  alert("Отсутствуют данные для голосования.");
   window.location.href = "check.html";
 }
 
-// Отображаем приветственное сообщение
-document.getElementById("welcomeMessage").textContent = `Добро пожаловать, ${participantName}! Вы можете проголосовать за одного конкурсанта.`;
+// Отображение номинации
+document.getElementById("nominationName").textContent = selectedNomination;
 
-// Функция для отображения списка конкурсантов
-function displayContestants(data) {
-  const list = document.getElementById("contestantList");
-  list.innerHTML = ""; // Очищаем список
+// DOM-элементы
+const contestantList = document.getElementById("contestantList");
 
-  Object.entries(data).forEach(([key, value]) => {
-    const listItem = document.createElement("li");
-
-    // Отображаем имя конкурсанта
-    const contestantName = document.createElement("span");
-    contestantName.textContent = value.name;
-
-    const voteButton = document.createElement("button");
-    voteButton.textContent = "Проголосовать";
-    voteButton.onclick = () => castVote(key, value.name);
-
-    listItem.appendChild(contestantName);
-    listItem.appendChild(voteButton);
-    list.appendChild(listItem);
-  });
-}
-
-// Функция для голосования
-async function castVote(contestantKey, contestantName) {
-  try {
-    // Получаем данные голосующего участника
-    const participantsSnapshot = await get(tableDataRef);
-    const participants = participantsSnapshot.val();
-
-    // Находим запись голосующего участника по имени
-    const participantEntry = Object.entries(participants).find(
-      ([_, value]) => value.name === participantName
-    );
-
-    if (!participantEntry) {
-      alert("Вы не зарегистрированы.");
-      return;
-    }
-
-    const [participantKey, participantData] = participantEntry;
-
-    if (participantData.score <= 0) {
-      alert("У вас недостаточно баллов для голосования.");
-      return;
-    }
-
-    // Получаем данные конкурсантов
-    const contestantsSnapshot = await get(secondListRef);
-    const contestants = contestantsSnapshot.val();
-
-    if (!contestants[contestantKey]) {
-      alert("Конкурсант не найден.");
-      return;
-    }
-
-    // Увеличиваем количество голосов у конкурсанта
-    const currentVotes = contestants[contestantKey].votes || 0;
-    await update(ref(db, `secondTableData/${contestantKey}`), {
-      votes: currentVotes + 1
-    });
-
-    // Уменьшаем балл у голосующего участника
-    await update(ref(db, `tableData/${participantKey}`), {
-      score: participantData.score - 1
-    });
-
-    alert(`Вы успешно проголосовали за ${contestantName}!`);
-    location.reload(); // Перезагружаем страницу, чтобы обновить данные
-  } catch (error) {
-    console.error("Ошибка при голосовании:", error);
-    alert("Произошла ошибка. Попробуйте снова.");
-  }
-}
-
-// Загружаем список конкурсантов
-get(secondListRef).then((snapshot) => {
+// Загрузка конкурсантов для выбранной номинации
+const secondListRef = ref(db, "secondTableData");
+onValue(secondListRef, (snapshot) => {
   const data = snapshot.val();
+  contestantList.innerHTML = ""; // Очистка списка
+
   if (data) {
-    displayContestants(data);
+    Object.entries(data).forEach(([key, value]) => {
+      if (value.nominations && value.nominations.includes(selectedNomination)) {
+        const listItem = document.createElement("li");
+
+        const contestantName = document.createElement("span");
+        contestantName.textContent = value.name;
+
+        const voteButton = document.createElement("button");
+        voteButton.textContent = "Проголосовать";
+        voteButton.onclick = () => {
+          alert(`Вы проголосовали за ${value.name} в номинации "${selectedNomination}"`);
+        };
+
+        listItem.appendChild(contestantName);
+        listItem.appendChild(voteButton);
+        contestantList.appendChild(listItem);
+      }
+    });
   } else {
-    document.getElementById("contestantList").textContent = "Нет доступных конкурсантов для голосования.";
+    contestantList.innerHTML = "<li>Нет участников для этой номинации.</li>";
   }
 });
