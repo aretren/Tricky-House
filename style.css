@@ -1,9 +1,9 @@
-/* Общий стиль для страницы */
+/* Общий стиль страницы */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Градиентный фон */
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Сине-фиолетовый градиент */
     color: white;
     min-height: 100vh;
     display: flex;
@@ -12,99 +12,105 @@ body {
     justify-content: flex-start;
 }
 
-/* Заголовок */
-h1, h2 {
+/* Главный заголовок */
+#mainTitle {
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
     margin-top: 20px;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Подзаголовки */
+h2 {
+    font-size: 24px;
+    margin: 10px 0;
     text-align: center;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-/* Поле ввода */
-input[type="text"] {
-    width: 80%;
-    max-width: 400px;
-    padding: 10px 15px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 25px; /* Округлённые края */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-size: 16px;
-    outline: none;
-}
-
-/* Поле ввода: фокус */
-input[type="text"]:focus {
-    border: 2px solid #2575fc; /* Синий акцент при фокусе */
-    box-shadow: 0 0 10px rgba(37, 117, 252, 0.5);
-}
-
-/* Кнопки */
-button {
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 25px; /* Округлённые края */
-    background: linear-gradient(135deg, #2575fc, #6a11cb); /* Сине-фиолетовый градиент */
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-}
-
-/* Кнопки: наведение */
-button:hover {
-    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Обратный градиент при наведении */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-/* Кнопки: активное состояние */
-button:active {
-    transform: scale(0.95); /* Лёгкий эффект нажатия */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Список */
+/* Список конкурсантов */
 ul {
     list-style-type: none;
     padding: 0;
-    margin: 20px 0;
-    width: 100%;
+    margin: 20px auto;
     max-width: 600px;
+    width: 100%;
 }
 
 /* Элементы списка */
 li {
     background: rgba(255, 255, 255, 0.1); /* Прозрачный белый фон */
-    margin: 10px 0;
+    margin: 15px 0;
     padding: 15px;
     border-radius: 15px; /* Округлённые края */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Текст внутри списка */
+/* Элементы списка: при наведении */
+li:hover {
+    transform: translateY(-5px); /* Лёгкий подъём */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Имя конкурсанта */
 li span {
-    font-size: 16px;
-    flex-grow: 1;
-}
-
-/* Кнопки внутри списка */
-li button {
-    margin-left: 10px;
-    padding: 5px 15px;
-    font-size: 14px;
-}
-
-/* Приветственное сообщение */
-#welcomeMessage {
     font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Прогресс-бар: контейнер */
+.progress-bar-container {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    height: 25px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Прогресс-бар */
+.progress-bar {
+    background: linear-gradient(135deg, #2575fc, #6a11cb); /* Градиент шкалы */
+    height: 100%;
+    line-height: 25px;
     text-align: center;
-    margin-bottom: 20px;
-    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 15px 0 0 15px; /* Округление только с левого края */
+    transition: width 0.4s ease; /* Плавное изменение ширины */
+}
+
+/* Кнопки */
+button {
     padding: 10px 20px;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    border: none;
+    border-radius: 25px; /* Округлённые края */
+    background: linear-gradient(135deg, #2575fc, #6a11cb); /* Сине-фиолетовый градиент */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* Кнопки: наведение */
+button:hover {
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Обратный градиент */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Кнопки: активное состояние */
+button:active {
+    transform: scale(0.95); /* Лёгкий эффект нажатия */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
