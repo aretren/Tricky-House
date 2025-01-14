@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -40,14 +40,36 @@ addButton.onclick = () => {
   }
 };
 
-// Загрузка списка номинаций в реальном времени
+// Загрузка списка номинаций с возможностью удаления
 onValue(nominationRef, (snapshot) => {
-  nominationList.innerHTML = ""; // Очистка списка
+  nominationList.innerHTML = ""; // Очищаем список
   const data = snapshot.val();
   if (data) {
-    Object.values(data).forEach((nomination) => {
+    Object.entries(data).forEach(([key, nomination]) => {
       const listItem = document.createElement("li");
-      listItem.textContent = nomination;
+
+      // Название номинации
+      const nameSpan = document.createElement("span");
+      nameSpan.textContent = nomination;
+
+      // Кнопка удаления
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Удалить";
+      deleteButton.onclick = () => {
+        if (confirm(`Вы уверены, что хотите удалить номинацию "${nomination}"?`)) {
+          remove(ref(db, `nominations/${key}`))
+            .then(() => {
+              alert(`Номинация "${nomination}" удалена.`);
+            })
+            .catch((error) => {
+              console.error("Ошибка при удалении номинации:", error);
+              alert("Не удалось удалить номинацию. Попробуйте снова.");
+            });
+        }
+      };
+
+      listItem.appendChild(nameSpan);
+      listItem.appendChild(deleteButton);
       nominationList.appendChild(listItem);
     });
   } else {
