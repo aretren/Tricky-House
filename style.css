@@ -29,6 +29,29 @@ h2 {
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
+/* Поле ввода */
+input[type="text"] {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px 20px; /* Увеличенный внутренний отступ */
+    margin: 15px 0;
+    border: none;
+    border-radius: 25px; /* Полностью округлённые края */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень для объёмности */
+    font-size: 16px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.9); /* Светлый прозрачный фон */
+    color: #333; /* Тёмный текст */
+    transition: all 0.3s ease; /* Плавный переход для наведения */
+}
+
+/* Поле ввода: фокус */
+input[type="text"]:focus {
+    border: 2px solid #6a11cb; /* Акцент на фокусе */
+    box-shadow: 0 0 10px rgba(106, 17, 203, 0.5); /* Подсветка при фокусе */
+    background: white; /* Чисто белый фон при фокусе */
+}
+
 /* Список конкурсантов */
 ul {
     list-style-type: none;
