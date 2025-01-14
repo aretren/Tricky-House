@@ -23,55 +23,61 @@ const nominationRef = ref(db, "nominations");
 const inputField = document.getElementById("newData");
 const addButton = document.getElementById("addButton");
 const tableBody = document.getElementById("table-body");
-const nominationCheckboxes = document.getElementById("nominationCheckboxes");
+const nominationInputs = document.getElementById("nominationInputs");
 
-// Загрузка списка номинаций
+// Загрузка номинаций
 onValue(nominationRef, (snapshot) => {
-  nominationCheckboxes.innerHTML = ""; // Очищаем чекбоксы
+  nominationInputs.innerHTML = ""; // Очищаем список номинаций
   const data = snapshot.val();
   if (data) {
     Object.values(data).forEach((nomination) => {
       const label = document.createElement("label");
+      label.textContent = nomination;
+
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.value = nomination;
+
       label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(nomination));
-      nominationCheckboxes.appendChild(label);
+      nominationInputs.appendChild(label);
     });
-  } else {
-    nominationCheckboxes.innerHTML = "<p>Нет доступных номинаций.</p>";
   }
 });
 
-// Функция для добавления участника
+// Добавление конкурсанта
 addButton.onclick = () => {
-  const newData = inputField.value.trim();
-  if (newData) {
-    // Собираем выбранные номинации
-    const selectedNominations = Array.from(
-      nominationCheckboxes.querySelectorAll("input:checked")
-    ).map((checkbox) => checkbox.value);
-
-    if (selectedNominations.length === 0) {
-      alert("Выберите хотя бы одну номинацию.");
-      return;
-    }
-
-    push(secondListRef, { name: newData, nominations: selectedNominations, votes: 0 })
-      .then(() => {
-        inputField.value = ""; // Очищаем поле ввода
-      })
-      .catch((error) => {
-        console.error("Ошибка при добавлении участника:", error);
-        alert("Не удалось добавить участника. Попробуйте снова.");
-      });
-  } else {
+  const name = inputField.value.trim();
+  if (!name) {
     alert("Введите имя участника.");
+    return;
   }
+
+  const nominations = Array.from(
+    nominationInputs.querySelectorAll("input:checked")
+  ).map((checkbox) => checkbox.value);
+
+  if (nominations.length === 0) {
+    alert("Выберите хотя бы одну номинацию.");
+    return;
+  }
+
+  const votesByNomination = nominations.reduce((acc, nomination) => {
+    acc[nomination] = 0; // У каждого конкурсанта начальное количество голосов 0
+    return acc;
+  }, {});
+
+  push(secondListRef, { name, nominations, votesByNomination })
+    .then(() => {
+      inputField.value = ""; // Очистка поля ввода
+      nominationInputs.querySelectorAll("input").forEach((input) => (input.checked = false));
+    })
+    .catch((error) => {
+      console.error("Ошибка при добавлении участника:", error);
+      alert("Не удалось добавить участника. Попробуйте снова.");
+    });
 };
 
-// Обновление таблицы участников
+// Обновление таблицы конкурсантов
 onValue(secondListRef, (snapshot) => {
   tableBody.innerHTML = ""; // Очищаем таблицу
   const data = snapshot.val();
@@ -79,19 +85,21 @@ onValue(secondListRef, (snapshot) => {
     Object.entries(data).forEach(([key, value]) => {
       const row = document.createElement("tr");
 
-      // Имя участника
+      // Имя конкурсанта
       const nameCell = document.createElement("td");
       nameCell.textContent = value.name;
       row.appendChild(nameCell);
 
-      // Номинации участника
+      // Номинации
       const nominationsCell = document.createElement("td");
       nominationsCell.textContent = value.nominations.join(", ");
       row.appendChild(nominationsCell);
 
-      // Голоса участника
+      // Голоса по номинациям
       const votesCell = document.createElement("td");
-      votesCell.textContent = value.votes || 0;
+      votesCell.textContent = Object.entries(value.votesByNomination)
+        .map(([nomination, count]) => `${nomination}: ${count}`)
+        .join(", ");
       row.appendChild(votesCell);
 
       // Кнопка удаления
