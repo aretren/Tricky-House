@@ -137,3 +137,44 @@ button:active {
     transform: scale(0.95); /* Лёгкий эффект нажатия */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
+
+/* Таблица */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Убирает лишние промежутки между ячейками */
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1); /* Прозрачный фон */
+    border-radius: 10px;
+    overflow: hidden; /* Чтобы углы были округлёнными */
+}
+
+/* Заголовки таблицы */
+table th {
+    text-align: left;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.2); /* Более тёмный фон для заголовков */
+    color: white;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* Разделитель под заголовком */
+}
+
+/* Ячейки таблицы */
+table td {
+    padding: 10px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2); /* Тонкий разделитель между столбцами */
+    color: white;
+}
+
+/* Первая колонка без левого разделителя */
+table td:first-child {
+    border-left: none;
+}
+
+/* Чередование строк таблицы */
+table tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.05); /* Лёгкий фон для чётных строк */
+}
+
+table tr:hover {
+    background: rgba(255, 255, 255, 0.1); /* Подсветка строки при наведении */
+}
