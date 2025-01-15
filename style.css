@@ -190,3 +190,42 @@ tr:hover {
     height: auto;
     display: block;
 }
+
+/* Вкладки голосования: контейнер */
+#tabsContainer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+/* Вкладка */
+.tab-button {
+    padding: 10px 20px;
+    font-family: 'Ink Free', Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* Наведение на вкладку */
+.tab-button:hover {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Активная вкладка */
+.tab-button.active {
+    background: linear-gradient(135deg, #ff8c00, #ff6347); /* Оранжево-красный градиент */
+    color: black; /* Чёрный текст */
+    box-shadow: 0 6px 12px rgba(255, 99, 71, 0.6); /* Подсветка */
+    border: 2px solid #ff4500; /* Яркая граница */
+    transform: scale(1.1); /* Увеличение размера */
+    z-index: 1; /* Поверх других вкладок */
+}
