@@ -292,3 +292,17 @@ input[type="number"]:focus {
     height: auto; /* Сохраняем пропорции изображения */
     display: block; /* Центрируем логотип */
 }
+
+/* Стили для логотипа */
+#logoContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0; /* Отступы сверху и снизу */
+}
+
+#logo {
+    max-width: 200px; /* Максимальная ширина логотипа */
+    height: auto; /* Сохраняем пропорции изображения */
+    display: block; /* Центрируем изображение */
+}
