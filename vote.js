@@ -104,13 +104,21 @@ function displayContestantsByNomination(nomination) {
             const currentVotes = contestant.votesByNomination[nomination] || 0;
 
             // Вычитание голоса у участника
-            await update(ref(db, `tableData/${participantKey}/votes`), {
-              [nomination]: remainingVotes - 1,
+            const updatedParticipantVotes = {
+              ...participantData.votes,
+              [nomination]: remainingVotes - 1
+            };
+            await update(ref(db, `tableData/${participantKey}`), {
+              votes: updatedParticipantVotes
             });
 
             // Добавление голоса конкурсанту
-            await update(ref(db, `secondTableData/${key}/votesByNomination`), {
-              [nomination]: currentVotes + 1,
+            const updatedContestantVotes = {
+              ...contestant.votesByNomination,
+              [nomination]: currentVotes + 1
+            };
+            await update(ref(db, `secondTableData/${key}`), {
+              votesByNomination: updatedContestantVotes
             });
 
             alert(`Вы успешно проголосовали за ${contestant.name} в номинации "${nomination}".`);
