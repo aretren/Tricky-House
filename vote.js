@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, onValue, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -33,6 +33,7 @@ const contestantList = document.getElementById("contestantList");
 // Ссылки на данные
 const nominationRef = ref(db, "nominations");
 const secondListRef = ref(db, "secondTableData");
+const participantRef = ref(db, "tableData");
 
 // Отображение вкладок
 function displayTabs(nominations) {
@@ -65,11 +66,11 @@ function displayContestantsByNomination(nomination) {
     contestantList.innerHTML = ""; // Очистка списка
 
     if (data) {
-      const filteredData = Object.values(data).filter((contestant) =>
+      const filteredData = Object.entries(data).filter(([_, contestant]) =>
         contestant.nominations.includes(nomination)
       );
 
-      filteredData.forEach((contestant) => {
+      filteredData.forEach(([key, contestant]) => {
         const listItem = document.createElement("li");
 
         const nameSpan = document.createElement("span");
@@ -77,7 +78,47 @@ function displayContestantsByNomination(nomination) {
 
         const voteButton = document.createElement("button");
         voteButton.textContent = "Проголосовать";
-        voteButton.onclick = () => alert(`Вы проголосовали за ${contestant.name} в номинации "${nomination}"`);
+        voteButton.onclick = async () => {
+          try {
+            // Проверка участника
+            const participantSnapshot = await get(participantRef);
+            const participants = participantSnapshot.val();
+            const participantEntry = Object.entries(participants).find(
+              ([_, p]) => p.name === participantName
+            );
+
+            if (!participantEntry) {
+              alert("Вы не зарегистрированы.");
+              return;
+            }
+
+            const [participantKey, participantData] = participantEntry;
+            const remainingVotes = participantData.votes[nomination] || 0;
+
+            if (remainingVotes <= 0) {
+              alert("У вас недостаточно голосов для этой номинации.");
+              return;
+            }
+
+            // Обновление голосов
+            const currentVotes = contestant.votesByNomination[nomination] || 0;
+
+            // Вычитание голоса у участника
+            await update(ref(db, `tableData/${participantKey}/votes`), {
+              [nomination]: remainingVotes - 1,
+            });
+
+            // Добавление голоса конкурсанту
+            await update(ref(db, `secondTableData/${key}/votesByNomination`), {
+              [nomination]: currentVotes + 1,
+            });
+
+            alert(`Вы успешно проголосовали за ${contestant.name} в номинации "${nomination}".`);
+          } catch (error) {
+            console.error("Ошибка голосования:", error);
+            alert("Произошла ошибка. Попробуйте снова.");
+          }
+        };
 
         listItem.appendChild(nameSpan);
         listItem.appendChild(voteButton);
