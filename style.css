@@ -288,7 +288,7 @@ input[type="number"]:focus {
 }
 
 #logo {
-    max-width: 370px; /* Максимальная ширина логотипа */
+    max-width: 300px; /* Максимальная ширина логотипа */
     height: auto; /* Сохраняем пропорции изображения */
     display: block; /* Центрируем логотип */
 }
@@ -298,11 +298,11 @@ input[type="number"]:focus {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px 0; /* Отступы сверху и снизу */
+    margin: 00px 0; /* Отступы сверху и снизу */
 }
 
 #logo {
-    max-width: 200px; /* Максимальная ширина логотипа */
+    max-width: 300px; /* Максимальная ширина логотипа */
     height: auto; /* Сохраняем пропорции изображения */
     display: block; /* Центрируем изображение */
 }
