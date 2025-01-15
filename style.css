@@ -278,3 +278,17 @@ input[type="number"]:focus {
 #nominationButtons button:hover {
     background: linear-gradient(90deg, #2575fc, #6a11cb); /* Изменение градиента при наведении */
 }
+
+/* Стили для логотипа */
+#logoContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0; /* Отступы сверху и снизу */
+}
+
+#logo {
+    max-width: 200px; /* Максимальная ширина логотипа */
+    height: auto; /* Сохраняем пропорции изображения */
+    display: block; /* Центрируем логотип */
+}
