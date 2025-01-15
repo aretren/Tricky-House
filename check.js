@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -19,52 +19,30 @@ const db = getDatabase(app);
 
 // DOM-элементы
 const searchField = document.getElementById("searchField");
-const checkButton = document.getElementById("checkButton");
-const nominationSelect = document.getElementById("nominationSelect");
+const nominationButtons = document.getElementById("nominationButtons");
 
 // Загрузка номинаций
 const nominationRef = ref(db, "nominations");
 onValue(nominationRef, (snapshot) => {
+  nominationButtons.innerHTML = ""; // Очищаем старые кнопки
   const data = snapshot.val();
+
   if (data) {
     Object.values(data).forEach((nomination) => {
-      const option = document.createElement("option");
-      option.value = nomination;
-      option.textContent = nomination;
-      nominationSelect.appendChild(option);
+      const button = document.createElement("button");
+      button.textContent = `Войти в "${nomination}"`;
+      button.onclick = () => {
+        const inputValue = searchField.value.trim();
+        if (!inputValue) {
+          alert("Введите ваше ФИО.");
+          return;
+        }
+        // Переход на страницу голосования с передачей ФИО и номинации
+        window.location.href = `vote.html?name=${encodeURIComponent(inputValue)}&nomination=${encodeURIComponent(nomination)}`;
+      };
+      nominationButtons.appendChild(button);
     });
+  } else {
+    nominationButtons.innerHTML = "<p>Нет доступных номинаций.</p>";
   }
 });
-
-// Проверка участника и переход
-checkButton.onclick = () => {
-  const inputValue = searchField.value.trim();
-  const selectedNomination = nominationSelect.value;
-
-  if (!inputValue) {
-    alert("Введите ФИО.");
-    return;
-  }
-
-  if (!selectedNomination) {
-    alert("Выберите номинацию.");
-    return;
-  }
-
-  // Проверяем участника в базе
-  const tableRef = ref(db, "tableData");
-  get(tableRef).then((snapshot) => {
-    const data = snapshot.val() || {};
-    const participant = Object.values(data).find((p) => p.name === inputValue);
-
-    if (participant) {
-      // Переход на страницу голосования с передачей ФИО и номинации
-      window.location.href = `vote.html?name=${encodeURIComponent(inputValue)}&nomination=${encodeURIComponent(selectedNomination)}`;
-    } else {
-      alert("Участник не найден.");
-    }
-  }).catch((error) => {
-    console.error("Ошибка при проверке:", error);
-    alert("Произошла ошибка. Попробуйте снова.");
-  });
-};
