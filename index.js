@@ -88,7 +88,10 @@ onValue(tableDataRef, (snapshot) => {
   tableBody.innerHTML = ""; // Очищаем таблицу
   const data = snapshot.val();
   if (data) {
-    Object.entries(data).forEach(([key, value]) => {
+    // Сортируем участников в алфавитном порядке
+    const sortedData = Object.entries(data).sort(([, a], [, b]) => a.name.localeCompare(b.name));
+
+    sortedData.forEach(([key, value]) => {
       const row = document.createElement("tr");
 
       // ФИО участника
