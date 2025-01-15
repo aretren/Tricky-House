@@ -52,7 +52,7 @@ onValue(nominationRef, (snapshot) => {
   }
 });
 
-// Добавление конкурсанта
+// Добавление участника
 addButton.onclick = () => {
   const name = inputField.value.trim();
   if (!name) {
