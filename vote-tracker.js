@@ -16,19 +16,65 @@ const firebaseConfig = {
 // Инициализация Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const secondListRef = ref(db, "secondTableData");
 
-// DOM-элемент для списка конкурсантов
+// Ссылки на базу данных
+const secondListRef = ref(db, "secondTableData");
+const nominationRef = ref(db, "nominations");
+
+// DOM-элементы
+const tabsContainer = document.getElementById("tabsContainer");
 const contestantList = document.getElementById("contestantList");
 
-// Функция для отображения шкал голосов
-function displayContestants(data) {
+// Функция для отображения вкладок
+function displayTabs(nominations) {
+  tabsContainer.innerHTML = ""; // Очистка вкладок
+
+  nominations.forEach((nomination, index) => {
+    const tabButton = document.createElement("button");
+    tabButton.textContent = nomination;
+    tabButton.className = "tab-button";
+    if (index === 0) tabButton.classList.add("active"); // Установить первую вкладку активной
+
+    tabButton.onclick = () => {
+      // Убрать активный класс со всех вкладок
+      document.querySelectorAll(".tab-button").forEach((btn) => btn.classList.remove("active"));
+      tabButton.classList.add("active"); // Установить активной текущую вкладку
+      displayContestantsByNomination(nomination);
+    };
+
+    tabsContainer.appendChild(tabButton);
+  });
+
+  // Показать данные для первой вкладки по умолчанию
+  if (nominations.length > 0) {
+    displayContestantsByNomination(nominations[0]);
+  }
+}
+
+// Функция для отображения конкурсантов по номинации
+function displayContestantsByNomination(nomination) {
+  onValue(secondListRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      const filteredData = Object.values(data).filter((contestant) =>
+        contestant.nominations.includes(nomination)
+      );
+
+      displayContestants(filteredData, nomination);
+    } else {
+      contestantList.innerHTML = "<p>Нет данных для отображения.</p>";
+    }
+  });
+}
+
+// Функция для отображения конкурсантов
+function displayContestants(data, nomination) {
   contestantList.innerHTML = ""; // Очищаем список перед обновлением
 
-  const votesArray = Object.values(data).map((value) => value.votes || 0);
+  const votesArray = data.map((value) => value.votesByNomination[nomination] || 0);
   const maxVotes = Math.max(...votesArray) || 1; // Максимальное количество голосов
 
-  Object.entries(data).forEach(([key, value]) => {
+  data.forEach((value) => {
     const listItem = document.createElement("li");
 
     // Имя конкурсанта
@@ -44,7 +90,7 @@ function displayContestants(data) {
     const progressBar = document.createElement("div");
     progressBar.className = "progress-bar";
 
-    const votes = value.votes || 0;
+    const votes = value.votesByNomination[nomination] || 0;
     const relativeWidth = (votes / maxVotes) * 100; // Динамическая ширина в процентах
     progressBar.style.width = `${relativeWidth}%`;
 
@@ -58,12 +104,13 @@ function displayContestants(data) {
   });
 }
 
-// Динамическое обновление списка из Firebase
-onValue(secondListRef, (snapshot) => {
+// Загрузка списка номинаций
+onValue(nominationRef, (snapshot) => {
   const data = snapshot.val();
   if (data) {
-    displayContestants(data);
+    const nominations = Object.values(data);
+    displayTabs(nominations);
   } else {
-    contestantList.innerHTML = "<p>Нет данных для отображения.</p>";
+    tabsContainer.innerHTML = "<p>Нет доступных номинаций.</p>";
   }
 });
