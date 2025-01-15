@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, onValue, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -20,80 +20,81 @@ const db = getDatabase(app);
 // Получение параметров URL
 const urlParams = new URLSearchParams(window.location.search);
 const participantName = urlParams.get("name");
-const selectedNomination = urlParams.get("nomination");
 
-if (!participantName || !selectedNomination) {
+if (!participantName) {
   alert("Отсутствуют данные для голосования.");
   window.location.href = "check.html";
 }
 
 // DOM-элементы
+const tabsContainer = document.getElementById("tabsContainer");
 const contestantList = document.getElementById("contestantList");
 
-// Загрузка конкурсантов и голосование
+// Ссылки на данные
+const nominationRef = ref(db, "nominations");
 const secondListRef = ref(db, "secondTableData");
-const participantRef = ref(db, "tableData");
 
-onValue(secondListRef, (snapshot) => {
-  const data = snapshot.val();
-  contestantList.innerHTML = ""; // Очистка списка
+// Отображение вкладок
+function displayTabs(nominations) {
+  tabsContainer.innerHTML = ""; // Очистка вкладок
 
-  if (data) {
-    Object.entries(data).forEach(([key, value]) => {
-      if (value.nominations.includes(selectedNomination)) {
+  nominations.forEach((nomination, index) => {
+    const button = document.createElement("button");
+    button.textContent = nomination;
+    button.className = "tab-button";
+    if (index === 0) button.classList.add("active");
+
+    button.onclick = () => {
+      document.querySelectorAll(".tab-button").forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+      displayContestantsByNomination(nomination);
+    };
+
+    tabsContainer.appendChild(button);
+  });
+
+  if (nominations.length > 0) {
+    displayContestantsByNomination(nominations[0]);
+  }
+}
+
+// Отображение конкурсантов для выбранной номинации
+function displayContestantsByNomination(nomination) {
+  onValue(secondListRef, (snapshot) => {
+    const data = snapshot.val();
+    contestantList.innerHTML = ""; // Очистка списка
+
+    if (data) {
+      const filteredData = Object.values(data).filter((contestant) =>
+        contestant.nominations.includes(nomination)
+      );
+
+      filteredData.forEach((contestant) => {
         const listItem = document.createElement("li");
 
-        const contestantName = document.createElement("span");
-        contestantName.textContent = value.name;
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = contestant.name;
 
         const voteButton = document.createElement("button");
         voteButton.textContent = "Проголосовать";
-        voteButton.onclick = async () => {
-          try {
-            // Проверка участника
-            const participantSnapshot = await get(participantRef);
-            const participants = participantSnapshot.val();
-            const participantEntry = Object.entries(participants).find(
-              ([_, p]) => p.name === participantName
-            );
+        voteButton.onclick = () => alert(`Вы проголосовали за ${contestant.name} в номинации "${nomination}"`);
 
-            if (!participantEntry) {
-              alert("Вы не зарегистрированы.");
-              return;
-            }
-
-            const [participantKey, participantData] = participantEntry;
-            const remainingVotes = participantData.votes[selectedNomination];
-
-            if (!remainingVotes || remainingVotes <= 0) {
-              alert("У вас недостаточно голосов для этой номинации.");
-              return;
-            }
-
-            // Вычитание голоса у участника
-            await update(ref(db, `tableData/${participantKey}/votes`), {
-              [selectedNomination]: remainingVotes - 1
-            });
-
-            // Добавление голоса конкурсанту
-            const currentVotes = value.votesByNomination[selectedNomination] || 0;
-            await update(ref(db, `secondTableData/${key}/votesByNomination`), {
-              [selectedNomination]: currentVotes + 1
-            });
-
-            alert(`Вы успешно проголосовали за ${value.name} в номинации "${selectedNomination}".`);
-          } catch (error) {
-            console.error("Ошибка голосования:", error);
-            alert("Произошла ошибка. Попробуйте снова.");
-          }
-        };
-
-        listItem.appendChild(contestantName);
+        listItem.appendChild(nameSpan);
         listItem.appendChild(voteButton);
         contestantList.appendChild(listItem);
-      }
-    });
+      });
+    } else {
+      contestantList.innerHTML = "<p>Нет данных для отображения.</p>";
+    }
+  });
+}
+
+// Загрузка номинаций
+onValue(nominationRef, (snapshot) => {
+  const data = snapshot.val();
+  if (data) {
+    displayTabs(Object.values(data));
   } else {
-    contestantList.innerHTML = "<li>Нет участников для этой номинации.</li>";
+    tabsContainer.innerHTML = "<p>Нет доступных номинаций.</p>";
   }
 });
