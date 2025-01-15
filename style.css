@@ -1,3 +1,11 @@
+/* Подключение пользовательского шрифта */
+@font-face {
+    font-family: 'Ink Free';
+    src: url('Inkfree.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* Общий стиль страницы */
 body {
     font-family: 'Ink Free', Arial, sans-serif;
