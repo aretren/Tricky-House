@@ -96,7 +96,7 @@ function displayContestantsByNomination(nomination) {
             const remainingVotes = participantData.votes[nomination] || 0;
 
             if (remainingVotes <= 0) {
-              alert("У вас недостаточно голосов для этой номинации.");
+              alert("У вас больше нет баллов для этой номинации.");
               return;
             }
 
