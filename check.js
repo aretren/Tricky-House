@@ -22,15 +22,15 @@ const searchField = document.getElementById("searchField");
 const loginButton = document.getElementById("loginButton");
 
 // Проверка имени участника
-async function isNameValid(inputValue) {
+async function findParticipant(inputValue) {
   const participantsRef = ref(db, "tableData");
   const snapshot = await get(participantsRef);
   const participants = Object.values(snapshot.val() || []);
 
   const inputParts = inputValue.trim().toLowerCase().split(" ");
-  if (inputParts.length !== 2) return false;
+  if (inputParts.length !== 2) return null;
 
-  return participants.some((participant) => {
+  return participants.find((participant) => {
     const nameParts = participant.name.toLowerCase().split(" ");
     return (
       (nameParts[0] === inputParts[0] && nameParts[1] === inputParts[1]) ||
@@ -47,11 +47,12 @@ loginButton.onclick = async () => {
     return;
   }
 
-  if (!(await isNameValid(inputValue))) {
+  const participant = await findParticipant(inputValue);
+  if (!participant) {
     alert("Указанное имя не найдено. Проверьте ввод.");
     return;
   }
 
-  // Переход на страницу голосования
-  window.location.href = `vote.html?name=${encodeURIComponent(inputValue)}`;
+  // Переход на страницу голосования с корректным именем из базы
+  window.location.href = `vote.html?name=${encodeURIComponent(participant.name)}`;
 };
