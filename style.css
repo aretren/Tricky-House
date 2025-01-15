@@ -1,9 +1,9 @@
 /* Общий стиль страницы */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Ink Free', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Сине-фиолетовый градиент */
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: white;
     min-height: 100vh;
     display: flex;
@@ -12,7 +12,7 @@ body {
     justify-content: flex-start;
 }
 
-/* Главный заголовок */
+/* Заголовки */
 #mainTitle {
     text-align: center;
     font-size: 48px;
@@ -21,7 +21,6 @@ body {
     text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* Подзаголовки */
 h2 {
     font-size: 24px;
     margin: 10px 0;
@@ -29,27 +28,27 @@ h2 {
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-/* Поле ввода */
-input[type="text"] {
+/* Поля ввода */
+input[type="text"], input[type="number"] {
+    font-family: 'Ink Free', Arial, sans-serif;
     width: 80%;
     max-width: 400px;
-    padding: 10px 20px; /* Увеличенный внутренний отступ */
+    padding: 10px 20px;
     margin: 15px 0;
     border: none;
-    border-radius: 25px; /* Полностью округлённые края */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень для объёмности */
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     font-size: 16px;
     outline: none;
-    background: rgba(255, 255, 255, 0.9); /* Светлый прозрачный фон */
-    color: #333; /* Тёмный текст */
-    transition: all 0.3s ease; /* Плавный переход для наведения */
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    transition: all 0.3s ease;
 }
 
-/* Поле ввода: фокус */
-input[type="text"]:focus {
-    border: 2px solid #6a11cb; /* Акцент на фокусе */
-    box-shadow: 0 0 10px rgba(106, 17, 203, 0.5); /* Подсветка при фокусе */
-    background: white; /* Чисто белый фон при фокусе */
+input[type="text"]:focus, input[type="number"]:focus {
+    border: 2px solid #6a11cb;
+    box-shadow: 0 0 10px rgba(106, 17, 203, 0.5);
+    background: white;
 }
 
 /* Список конкурсантов */
@@ -61,12 +60,11 @@ ul {
     width: 100%;
 }
 
-/* Элементы списка */
 li {
-    background: rgba(255, 255, 255, 0.1); /* Прозрачный белый фон */
+    background: rgba(255, 255, 255, 0.1);
     margin: 15px 0;
     padding: 15px;
-    border-radius: 15px; /* Округлённые края */
+    border-radius: 15px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
@@ -74,50 +72,48 @@ li {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Элементы списка: при наведении */
 li:hover {
-    transform: translateY(-5px); /* Лёгкий подъём */
+    transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
-/* Имя конкурсанта */
 li span {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-/* Прогресс-бар: контейнер */
+/* Прогресс-бар */
 .progress-bar-container {
     width: 100%;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     overflow: hidden;
     position: relative;
-    height: 30px; /* Высота шкалы увеличена */
+    height: 30px;
     box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-/* Прогресс-бар */
 .progress-bar {
-    background: linear-gradient(135deg, #2575fc, #6a11cb); /* Градиент шкалы */
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
     height: 100%;
-    line-height: 30px; /* Совпадает с высотой контейнера */
+    line-height: 30px;
     text-align: center;
     color: white;
     font-size: 16px;
     font-weight: bold;
-    border-radius: 15px 0 0 15px; /* Округление только с левого края */
-    transition: width 0.4s ease; /* Плавное изменение ширины */
+    border-radius: 15px 0 0 15px;
+    transition: width 0.4s ease;
 }
 
 /* Кнопки */
 button {
+    font-family: 'Ink Free', Arial, sans-serif;
     padding: 10px 20px;
     margin-top: 20px;
     border: none;
-    border-radius: 25px; /* Округлённые края */
-    background: linear-gradient(135deg, #2575fc, #6a11cb); /* Сине-фиолетовый градиент */
+    border-radius: 25px;
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
     color: white;
     font-size: 16px;
     font-weight: bold;
@@ -126,183 +122,63 @@ button {
     transition: all 0.3s ease;
 }
 
-/* Кнопки: наведение */
 button:hover {
-    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Обратный градиент */
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Кнопки: активное состояние */
 button:active {
-    transform: scale(0.95); /* Лёгкий эффект нажатия */
+    transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Таблица */
+/* Таблицы */
 table {
     width: 100%;
-    border-collapse: collapse; /* Убирает лишние промежутки между ячейками */
+    border-collapse: collapse;
     margin-top: 20px;
-    background: rgba(255, 255, 255, 0.1); /* Прозрачный фон */
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    overflow: hidden; /* Чтобы углы были округлёнными */
+    overflow: hidden;
 }
 
-/* Заголовки таблицы */
-table th {
+th {
     text-align: left;
     padding: 10px;
-    background: rgba(255, 255, 255, 0.2); /* Более тёмный фон для заголовков */
+    background: rgba(255, 255, 255, 0.2);
     color: white;
     font-weight: bold;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* Разделитель под заголовком */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Ячейки таблицы */
-table td {
+td {
     padding: 10px;
-    border-left: 1px solid rgba(255, 255, 255, 0.2); /* Тонкий разделитель между столбцами */
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
 }
 
-/* Первая колонка без левого разделителя */
-table td:first-child {
+td:first-child {
     border-left: none;
 }
 
-/* Чередование строк таблицы */
-table tr:nth-child(even) {
-    background: rgba(255, 255, 255, 0.05); /* Лёгкий фон для чётных строк */
+tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.05);
 }
 
-table tr:hover {
-    background: rgba(255, 255, 255, 0.1); /* Подсветка строки при наведении */
+tr:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
-/* Поле ввода голосов */
-input[type="number"] {
-    width: 60%; /* Уже, чем поле для ФИО */
+/* Логотип */
+#logoContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+#logo {
     max-width: 300px;
-    padding: 8px 15px; /* Немного уменьшенные отступы */
-    margin: 10px 5px; /* Больше места между полями */
-    border: none;
-    border-radius: 20px; /* Округлённые края */
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Лёгкая тень */
-    font-size: 14px; /* Меньший шрифт */
-    outline: none;
-    background: rgba(255, 255, 255, 0.9); /* Светлый фон */
-    color: #333; /* Тёмный текст */
-    transition: all 0.3s ease; /* Плавный переход для фокуса */
-}
-
-/* Поле ввода голосов: фокус */
-input[type="number"]:focus {
-    border: 2px solid #6a11cb; /* Акцент на фокусе */
-    box-shadow: 0 0 8px rgba(106, 17, 203, 0.5); /* Подсветка при фокусе */
-    background: white; /* Чисто белый фон при фокусе */
-}
-
-/* Обёртка для номинации */
-.nomination-wrapper {
-    margin-bottom: 10px; /* Отступ между номинациями */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 400px; /* Ограничение ширины списка */
-}
-
-/* Стиль для меток номинаций */
-.nomination-wrapper label {
-    font-size: 16px;
-    color: white;
-    flex-grow: 1;
-    margin-right: 10px; /* Отступ между текстом и полем ввода */
-}
-
-.nomination-wrapper {
-    margin-bottom: 10px; /* Отступ между строками */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 400px; /* Ограничение ширины */
-}
-
-.nomination-wrapper label {
-    font-size: 16px;
-    color: white;
-    margin-right: 10px;
-}
-
-/* Поле для ввода голосов */
-.nomination-wrapper input[type="number"] {
-    width: 60px; /* Узкое поле для чисел */
-    padding: 5px 10px;
-    border: none;
-    border-radius: 20px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    outline: none;
-    background: rgba(255, 255, 255, 0.9);
-    color: #333;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-/* Поле для ввода голосов: фокус */
-.nomination-wrapper input[type="number"]:focus {
-    border: 2px solid #6a11cb;
-    box-shadow: 0 0 8px rgba(106, 17, 203, 0.5);
-    background: white;
-}
-
-/* Стили для кнопок номинаций */
-#nominationButtons {
-    display: flex;
-    flex-direction: column; /* Расположение кнопок вертикально */
-    gap: 10px; /* Отступы между кнопками */
-    margin-top: 20px;
-}
-
-#nominationButtons button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px; /* Округлённые края */
-    font-size: 16px;
-    cursor: pointer;
-    background: linear-gradient(90deg, #6a11cb, #2575fc); /* Градиентный фон */
-    color: white;
-    transition: background 0.3s ease;
-}
-
-#nominationButtons button:hover {
-    background: linear-gradient(90deg, #2575fc, #6a11cb); /* Изменение градиента при наведении */
-}
-
-/* Стили для логотипа */
-#logoContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0px 0; /* Отступы сверху и снизу */
-}
-
-#logo {
-    max-width: 300px; /* Максимальная ширина логотипа */
-    height: auto; /* Сохраняем пропорции изображения */
-    display: block; /* Центрируем логотип */
-}
-
-/* Стили для логотипа */
-#logoContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 00px 0; /* Отступы сверху и снизу */
-}
-
-#logo {
-    max-width: 300px; /* Максимальная ширина логотипа */
-    height: auto; /* Сохраняем пропорции изображения */
-    display: block; /* Центрируем изображение */
+    height: auto;
+    display: block;
 }
