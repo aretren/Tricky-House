@@ -23,11 +23,11 @@ const nominationRef = ref(db, "nominations");
 const inputField = document.getElementById("newData");
 const addButton = document.getElementById("addButton");
 const tableBody = document.getElementById("table-body");
-const nominationInputs = document.getElementById("nominationInputs");
+const nominationCheckboxes = document.getElementById("nominationCheckboxes");
 
 // Загрузка списка номинаций
 onValue(nominationRef, (snapshot) => {
-  nominationInputs.innerHTML = ""; // Очищаем список номинаций
+  nominationCheckboxes.innerHTML = ""; // Очищаем список номинаций
   const data = snapshot.val();
   if (data) {
     Object.entries(data).forEach(([key, nomination]) => {
@@ -45,14 +45,14 @@ onValue(nominationRef, (snapshot) => {
 
       wrapper.appendChild(checkbox);
       wrapper.appendChild(label);
-      nominationInputs.appendChild(wrapper);
+      nominationCheckboxes.appendChild(wrapper);
     });
   } else {
-    nominationInputs.innerHTML = "<p>Нет доступных номинаций.</p>";
+    nominationCheckboxes.innerHTML = "<p>Нет доступных номинаций.</p>";
   }
 });
 
-// Добавление участника
+// Добавление конкурсанта
 addButton.onclick = () => {
   const name = inputField.value.trim();
   if (!name) {
@@ -61,7 +61,7 @@ addButton.onclick = () => {
   }
 
   const selectedNominations = Array.from(
-    nominationInputs.querySelectorAll("input[type='checkbox']:checked")
+    nominationCheckboxes.querySelectorAll("input[type='checkbox']:checked")
   ).map((checkbox) => checkbox.value);
 
   if (selectedNominations.length === 0) {
@@ -77,7 +77,7 @@ addButton.onclick = () => {
   push(secondListRef, { name, nominations: selectedNominations, votesByNomination })
     .then(() => {
       inputField.value = ""; // Очистка поля ввода
-      nominationInputs.querySelectorAll("input").forEach((input) => (input.checked = false));
+      nominationCheckboxes.querySelectorAll("input").forEach((input) => (input.checked = false));
     })
     .catch((error) => {
       console.error("Ошибка при добавлении участника:", error);
