@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, onValue, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -50,31 +50,32 @@ onValue(secondListRef, (snapshot) => {
         voteButton.textContent = "Проголосовать";
         voteButton.onclick = async () => {
           try {
-            // Вычитание голоса у участника
+            // Проверка участника
             const participantSnapshot = await get(participantRef);
             const participants = participantSnapshot.val();
-            const participant = Object.entries(participants).find(
+            const participantEntry = Object.entries(participants).find(
               ([_, p]) => p.name === participantName
             );
 
-            if (!participant) {
+            if (!participantEntry) {
               alert("Вы не зарегистрированы.");
               return;
             }
 
-            const [participantKey, participantData] = participant;
-            const remainingVotes = participantData.votes[selectedNomination] || 0;
+            const [participantKey, participantData] = participantEntry;
+            const remainingVotes = participantData.votes[selectedNomination];
 
-            if (remainingVotes <= 0) {
+            if (!remainingVotes || remainingVotes <= 0) {
               alert("У вас недостаточно голосов для этой номинации.");
               return;
             }
 
-            // Обновление голосов участника и конкурсанта
+            // Вычитание голоса у участника
             await update(ref(db, `tableData/${participantKey}/votes`), {
               [selectedNomination]: remainingVotes - 1
             });
 
+            // Добавление голоса конкурсанту
             const currentVotes = value.votesByNomination[selectedNomination] || 0;
             await update(ref(db, `secondTableData/${key}/votesByNomination`), {
               [selectedNomination]: currentVotes + 1
