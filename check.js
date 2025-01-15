@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -21,13 +21,33 @@ const db = getDatabase(app);
 const searchField = document.getElementById("searchField");
 const nominationButtons = document.getElementById("nominationButtons");
 
-// Загрузка номинаций
+// Проверка имени участника
+function isNameValid(inputValue, participants) {
+  const inputParts = inputValue.trim().toLowerCase().split(" ");
+  if (inputParts.length !== 2) return false; // Убедимся, что введены два слова (имя и фамилия)
+
+  return participants.some((participant) => {
+    const nameParts = participant.name.toLowerCase().split(" ");
+    return (
+      (nameParts[0] === inputParts[0] && nameParts[1] === inputParts[1]) ||
+      (nameParts[0] === inputParts[1] && nameParts[1] === inputParts[0])
+    );
+  });
+}
+
+// Загрузка участников и номинаций
+const participantsRef = ref(db, "tableData");
 const nominationRef = ref(db, "nominations");
-onValue(nominationRef, (snapshot) => {
+
+onValue(nominationRef, async (snapshot) => {
   nominationButtons.innerHTML = ""; // Очищаем старые кнопки
   const data = snapshot.val();
 
   if (data) {
+    // Получаем список участников
+    const participantsSnapshot = await get(participantsRef);
+    const participants = Object.values(participantsSnapshot.val() || []);
+
     Object.values(data).forEach((nomination) => {
       const button = document.createElement("button");
       button.textContent = `Войти в "${nomination}"`;
@@ -37,6 +57,12 @@ onValue(nominationRef, (snapshot) => {
           alert("Введите ваше ФИО.");
           return;
         }
+
+        if (!isNameValid(inputValue, participants)) {
+          alert("Указанное имя не найдено. Проверьте ввод.");
+          return;
+        }
+
         // Переход на страницу голосования с передачей ФИО и номинации
         window.location.href = `vote.html?name=${encodeURIComponent(inputValue)}&nomination=${encodeURIComponent(nomination)}`;
       };
