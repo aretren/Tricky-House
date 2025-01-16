@@ -229,7 +229,6 @@ tr:hover {
 
 /* Вкладки голосования: контейнер */
 #tabsContainer {
-    justify-content: center;
     display: flex;
     flex-wrap: nowrap; /* Вкладки не переносятся на новую строку */
     overflow-x: auto; /* Горизонтальная прокрутка */
@@ -245,7 +244,7 @@ tr:hover {
 #tabsContainer::before,
 #tabsContainer::after {
     content: ""; /* Пустые элементы для центрирования */
-    flex: 0 0 50vw; /* Создаем отступы шириной половины экрана */
+    flex: 0 0 3vw; /* Создаем отступы шириной половины экрана */
 }
 
 /* Вкладка */
