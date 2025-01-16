@@ -228,13 +228,20 @@ tr:hover {
 #tabsContainer {
     display: flex;
     flex-wrap: nowrap; /* Чтобы все вкладки не переносились на новую строку */
-    overflow-x: auto; /* Прокрутка влево/вправ */
+    overflow-x: auto; /* Прокрутка влево/вправо */
     justify-content: center;
     gap: 10px;
     margin: 20px 0;
     padding-top: 45px;
     padding-bottom: 45px; /* Добавим немного отступа для удобства */
     width: 100%;
+    position: relative;
+}
+
+#tabsContainer::before,
+#tabsContainer::after {
+    content: ""; /* Добавляем пустые элементы для отступов */
+    flex: 1; /* Растягиваем их, чтобы создать равномерные края */
 }
 
 /* Вкладка */
