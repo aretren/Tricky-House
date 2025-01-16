@@ -229,6 +229,7 @@ tr:hover {
     display: flex;
     flex-wrap: nowrap; /* Чтобы все вкладки не переносились на новую строку */
     overflow-x: auto; /* Прокрутка влево/вправ */
+    justify-content: center;
     gap: 10px;
     margin: 20px 0;
     padding-top: 45px;
