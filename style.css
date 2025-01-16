@@ -238,13 +238,13 @@ tr:hover {
     padding-bottom: 45px;
     width: 100%;
     position: relative;
-    scroll-padding: 0 50vw; /* Центрируем прокрутку для начала и конца */
+    scroll-padding: 0 4vw; /* Центрируем прокрутку для начала и конца */
 }
 
 #tabsContainer::before,
 #tabsContainer::after {
     content: ""; /* Пустые элементы для центрирования */
-    flex: 0 0 3vw; /* Создаем отступы шириной половины экрана */
+    flex: 0 0 4vw; /* Создаем отступы шириной половины экрана */
 }
 
 /* Вкладка */
