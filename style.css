@@ -227,9 +227,12 @@ tr:hover {
 /* Вкладки голосования: контейнер */
 #tabsContainer {
     display: flex;
-    justify-content: center;
+    flex-wrap: nowrap; /* Чтобы все вкладки не переносились на новую строку */
+    overflow-x: auto; /* Прокрутка влево/вправ */
     gap: 10px;
     margin: 20px 0;
+    padding-bottom: 10px; /* Добавим немного отступа для удобства */
+    width: 100%;
 }
 
 /* Вкладка */
@@ -238,7 +241,7 @@ tr:hover {
     font-family: 'Ink Free', Arial, sans-serif;
     font-size: 16px;
     font-weight: bold;
-    color: #ffffff;
+    color: white;
     background: linear-gradient(135deg, #7b4397, #00e5ff);
     border: none;
     border-radius: 15px;
@@ -249,7 +252,7 @@ tr:hover {
 
 /* Наведение на вкладку */
 .tab-button:hover {
-    background: linear-gradient(135deg, #00e5ff, #7b4397);
+    background: linear-gradient(135deg, #dc2430, #7b4397);
     box-shadow: 0 0 20px rgba(255, 105, 180, 0.9), 0 0 30px rgba(138, 43, 226, 0.7);
 }
 
