@@ -227,28 +227,26 @@ tr:hover {
     filter: drop-shadow(0 0 15px rgba(138, 43, 226, 0.8));
 }
 
+}
+
 /* Вкладки голосования: контейнер */
 #tabsContainer {
     display: flex;
     flex-wrap: nowrap; /* Вкладки не переносятся на новую строку */
-    justify-content: center; /* Центрируем вкладки */
-    align-items: center;
-    gap: 10px; /* Отступы между вкладками */
-    padding: 45px 0; /* Внутренние отступы */
-    position: relative; /* Для позиционирования псевдоэлементов */
-    overflow-x: auto; /* Включаем горизонтальную прокрутку */
-    overflow-y: visible; /* Убираем обрезание свечения по вертикали */
-    scroll-snap-type: x mandatory; /* Привязка вкладок при прокрутке */
-    -webkit-overflow-scrolling: touch; /* Гладкая прокрутка для сенсорных экранов */
+    overflow-x: auto; /* Горизонтальная прокрутка */
+    gap: 10px; /* Расстояние между вкладками */
+    margin: 0;
+    padding-top: 45px;
+    padding-bottom: 45px;
+    width: 100%;
+    position: relative;
+    scroll-padding: 0 4vw; /* Центрируем прокрутку для начала и конца */
 }
 
-/* Добавляем прозрачные отступы для свечения */
 #tabsContainer::before,
 #tabsContainer::after {
-    content: ""; /* Пустые элементы для центрирования и свечения */
-    flex: 0 0 75px; /* Создаем отступы для свечения */
-    height: 100%; /* Высота равна высоте контейнера */
-    pointer-events: none; /* Эти элементы не должны мешать */
+    content: ""; /* Пустые элементы для центрирования */
+    flex: 0 0 4vw; /* Создаем отступы шириной половины экрана */
 }
 
 /* Вкладка */
@@ -263,9 +261,8 @@ tr:hover {
     border-radius: 15px;
     cursor: pointer;
     box-shadow: 0 0 15px rgba(138, 43, 226, 0.8), 0 0 20px rgba(75, 0, 130, 0.6);
-    scroll-snap-align: center; /* Центрируем вкладки при прокрутке */
     transition: all 0.3s ease;
-    white-space: nowrap; /* Запрет на перенос текста внутри вкладок */
+    scroll-snap-align: center; /* Центрирование вкладки при остановке прокрутки */
 }
 
 /* Наведение на вкладку */
@@ -278,15 +275,10 @@ tr:hover {
 .tab-button.active {
     background: linear-gradient(135deg, #ff00ff, #00e5ff);
     color: #121212;
-    box-shadow: 0 0 40px rgba(255, 20, 147, 0.9), 0 0 60px rgba(138, 43, 226, 0.8); /* Увеличиваем размеры свечения */
+    box-shadow: 0 0 25px rgba(255, 20, 147, 0.9), 0 0 40px rgba(138, 43, 226, 0.8);
     border: 2px solid #ff00ff;
     transform: scale(1.1);
-    z-index: 3; /* Активная вкладка выше остальных */
-}
-
-/* Убираем горизонтальную полосу прокрутки, но сохраняем возможность прокрутки */
-body {
-    overflow-x: hidden; /* Убираем горизонтальную полосу прокрутки на уровне страницы */
+    z-index: 1;
 }
 
 /* Скрыть столбец "Голоса" */
