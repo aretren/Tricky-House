@@ -230,7 +230,7 @@ tr:hover {
     flex-wrap: nowrap; /* Вкладки не переносятся на новую строку */
     overflow-x: auto; /* Горизонтальная прокрутка */
     gap: 10px; /* Расстояние между вкладками */
-    margin: 20px 0;
+    margin: 0;
     padding-top: 45px;
     padding-bottom: 45px;
     width: 100%;
