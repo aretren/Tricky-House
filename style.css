@@ -84,7 +84,7 @@ ul {
 }
 
 li {
-    background: linear-gradient(135deg, #7b4397, #dc2430);
+    background: linear-gradient(135deg, #7b4397, #00e5ff);
     margin: 15px 0;
     padding: 15px;
     border-radius: 15px;
@@ -235,7 +235,7 @@ tr:hover {
     font-size: 16px;
     font-weight: bold;
     color: #ffffff;
-    background: linear-gradient(135deg, #7b4397, #dc2430);
+    background: linear-gradient(135deg, #7b4397, #00e5ff);
     border: none;
     border-radius: 15px;
     cursor: pointer;
@@ -245,7 +245,7 @@ tr:hover {
 
 /* Наведение на вкладку */
 .tab-button:hover {
-    background: linear-gradient(135deg, #dc2430, #7b4397);
+    background: linear-gradient(135deg, #00e5ff, #7b4397);
     box-shadow: 0 0 20px rgba(255, 105, 180, 0.9), 0 0 30px rgba(138, 43, 226, 0.7);
 }
 
