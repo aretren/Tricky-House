@@ -106,6 +106,9 @@ li span {
     font-weight: bold;
     margin-bottom: 10px;
     color: #ffffff;
+    word-wrap: break-word; /* Перенос длинных слов */
+    overflow-wrap: break-word; /* Перенос длинных слов */
+    white-space: normal; /* Перенос на новую строку */
 }
 
 /* Прогресс-бар */
@@ -183,9 +186,9 @@ th {
 }
 
 th, td {
-    font-size: calc(10px + 0.4vw); /* Более сильное уменьшение шрифта */
-    word-wrap: break-word; /* Перенос слов для длинного текста */
-    white-space: normal; /* Разрешает перенос текста на новую строку */
+    font-size: calc(10px + 0.4vw); /* Динамическое уменьшение текста */
+    word-wrap: break-word; /* Перенос длинных слов */
+    white-space: normal; /* Разрешение на перенос */
     padding: 8px; /* Уменьшенный отступ */
 }
 
