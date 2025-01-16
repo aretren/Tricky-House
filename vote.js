@@ -51,7 +51,10 @@ function displayTabs(nominations) {
       displayContestantsByNomination(nomination);
     };
 
-    tabsContainer.appendChild(button);
+    const listItem = document.createElement("div");
+    listItem.className = "tab-list-item";
+    listItem.appendChild(button);
+    tabsContainer.appendChild(listItem);
   });
 
   if (nominations.length > 0) {
