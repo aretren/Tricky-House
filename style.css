@@ -231,21 +231,27 @@ tr:hover {
 #tabsContainer {
     display: flex;
     flex-wrap: nowrap; /* Вкладки не переносятся на новую строку */
-    justify-content: center; /* Центрируем вкладки, если они помещаются */
-    align-items: center; /* Вертикальное центрирование вкладок */
+    justify-content: center; /* Центрируем вкладки */
+    align-items: center;
     gap: 10px; /* Отступы между вкладками */
-    padding: 10px 0; /* Увеличенные внутренние отступы для предотвращения обрезки свечения */
-    overflow-x: auto; /* Горизонтальная прокрутка, если вкладки не вмещаются */
-    scroll-snap-type: x mandatory; /* Аккуратное пролистывание вкладок */
+    padding: 45px 0; /* Внутренние отступы */
+    overflow-x: auto; /* Горизонтальная прокрутка */
+    overflow-y: visible; /* Гарантируем видимость вертикальных элементов */
+    scroll-snap-type: x mandatory; /* Прокрутка с привязкой */
     white-space: nowrap; /* Отключаем перенос строк */
-    overflow-y: visible; /* Обеспечиваем отображение свечения вне контейнера */
+    margin: 0; /* Убираем внешние отступы */
+    position: relative; /* Для управления положением элементов внутри */
+    z-index: 1; /* Контейнер должен находиться выше фона */
+    box-sizing: border-box; /* Учет паддингов и границ */
 }
 
-/* Псевдоэлементы для центрирования */
-#tabsContainer::before,
-#tabsContainer::after {
-    content: ""; /* Создаем пустые блоки */
-    flex: 1; /* Они занимают оставшееся пространство */
+/* Исправляем обрезание свечения у родительского элемента */
+body {
+    overflow-y: visible; /* Делаем тело страницы видимым для свечения */
+}
+
+main, section, .content-wrapper, .page-container {
+    overflow: visible !important; /* Убираем ограничения для внешних контейнеров */
 }
 
 /* Вкладка */
@@ -260,24 +266,34 @@ tr:hover {
     border-radius: 15px;
     cursor: pointer;
     box-shadow: 0 0 15px rgba(138, 43, 226, 0.8), 0 0 20px rgba(75, 0, 130, 0.6);
-    scroll-snap-align: center; /* Центрируем вкладку в зоне видимости при прокрутке */
+    scroll-snap-align: center; /* Центрируем вкладки при прокрутке */
     transition: all 0.3s ease;
+    position: relative; /* Для управления свечением */
+    z-index: 2; /* Поднимаем вкладки над контейнером */
 }
 
 /* Наведение на вкладку */
 .tab-button:hover {
     background: linear-gradient(135deg, #dc2430, #7b4397);
-    box-shadow: 0 0 20px rgba(255, 105, 180, 0.9), 0 0 30px rgba(138, 43, 226, 0.7);
+    box-shadow: 0 0 25px rgba(255, 105, 180, 0.9), 0 0 35px rgba(138, 43, 226, 0.7);
 }
 
 /* Активная вкладка */
 .tab-button.active {
     background: linear-gradient(135deg, #ff00ff, #00e5ff);
     color: #121212;
-    box-shadow: 0 0 25px rgba(255, 20, 147, 0.9), 0 0 40px rgba(138, 43, 226, 0.8);
+    box-shadow: 0 0 40px rgba(255, 20, 147, 0.9), 0 0 60px rgba(138, 43, 226, 0.8); /* Увеличиваем размеры свечения */
     border: 2px solid #ff00ff;
     transform: scale(1.1);
-    z-index: 1;
+    z-index: 3; /* Активная вкладка выше остальных */
+}
+
+/* Увеличиваем область для свечения */
+#tabsContainer::before,
+#tabsContainer::after {
+    content: ""; /* Пустые элементы для центрирования */
+    flex: 0 0 3vw; /* Создаем отступы шириной части экрана */
+    height: 0; /* Убираем влияние на высоту контейнера */
 }
 
 /* Скрыть столбец "Голоса" */
