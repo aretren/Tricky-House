@@ -227,21 +227,21 @@ tr:hover {
 /* Вкладки голосования: контейнер */
 #tabsContainer {
     display: flex;
-    flex-wrap: nowrap; /* Чтобы все вкладки не переносились на новую строку */
-    overflow-x: auto; /* Прокрутка влево/вправо */
-    justify-content: center;
-    gap: 10px;
+    flex-wrap: nowrap; /* Вкладки не переносятся на новую строку */
+    overflow-x: auto; /* Горизонтальная прокрутка */
+    gap: 10px; /* Расстояние между вкладками */
     margin: 20px 0;
     padding-top: 45px;
-    padding-bottom: 45px; /* Добавим немного отступа для удобства */
+    padding-bottom: 45px;
     width: 100%;
     position: relative;
+    scroll-padding: 0 50vw; /* Центрируем прокрутку для начала и конца */
 }
 
 #tabsContainer::before,
 #tabsContainer::after {
-    content: ""; /* Добавляем пустые элементы для отступов */
-    flex: 1; /* Растягиваем их, чтобы создать равномерные края */
+    content: ""; /* Пустые элементы для центрирования */
+    flex: 0 0 50vw; /* Создаем отступы шириной половины экрана */
 }
 
 /* Вкладка */
