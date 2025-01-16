@@ -235,23 +235,18 @@ tr:hover {
     align-items: center;
     gap: 10px; /* Отступы между вкладками */
     padding: 45px 0; /* Внутренние отступы */
-    overflow-x: auto; /* Горизонтальная прокрутка */
-    overflow-y: visible; /* Гарантируем видимость вертикальных элементов */
-    scroll-snap-type: x mandatory; /* Прокрутка с привязкой */
-    white-space: nowrap; /* Отключаем перенос строк */
-    margin: 0; /* Убираем внешние отступы */
-    position: relative; /* Для управления положением элементов внутри */
-    z-index: 1; /* Контейнер должен находиться выше фона */
-    box-sizing: border-box; /* Учет паддингов и границ */
+    position: relative; /* Для позиционирования псевдоэлементов */
+    overflow-x: clip; /* Убираем горизонтальную полосу прокрутки */
+    scroll-snap-type: x mandatory; /* Привязка вкладок при прокрутке */
 }
 
-/* Исправляем обрезание свечения у родительского элемента */
-body {
-    overflow-y: visible; /* Делаем тело страницы видимым для свечения */
-}
-
-main, section, .content-wrapper, .page-container {
-    overflow: visible !important; /* Убираем ограничения для внешних контейнеров */
+/* Добавляем прозрачные отступы для свечения */
+#tabsContainer::before,
+#tabsContainer::after {
+    content: ""; /* Пустые элементы для центрирования и свечения */
+    flex: 0 0 50px; /* Отступы для свечения */
+    height: 100%; /* Высота равна высоте контейнера */
+    pointer-events: none; /* Эти элементы не должны мешать */
 }
 
 /* Вкладка */
@@ -268,14 +263,12 @@ main, section, .content-wrapper, .page-container {
     box-shadow: 0 0 15px rgba(138, 43, 226, 0.8), 0 0 20px rgba(75, 0, 130, 0.6);
     scroll-snap-align: center; /* Центрируем вкладки при прокрутке */
     transition: all 0.3s ease;
-    position: relative; /* Для управления свечением */
-    z-index: 2; /* Поднимаем вкладки над контейнером */
 }
 
 /* Наведение на вкладку */
 .tab-button:hover {
     background: linear-gradient(135deg, #dc2430, #7b4397);
-    box-shadow: 0 0 25px rgba(255, 105, 180, 0.9), 0 0 35px rgba(138, 43, 226, 0.7);
+    box-shadow: 0 0 20px rgba(255, 105, 180, 0.9), 0 0 30px rgba(138, 43, 226, 0.7);
 }
 
 /* Активная вкладка */
@@ -288,12 +281,9 @@ main, section, .content-wrapper, .page-container {
     z-index: 3; /* Активная вкладка выше остальных */
 }
 
-/* Увеличиваем область для свечения */
-#tabsContainer::before,
-#tabsContainer::after {
-    content: ""; /* Пустые элементы для центрирования */
-    flex: 0 0 3vw; /* Создаем отступы шириной части экрана */
-    height: 0; /* Убираем влияние на высоту контейнера */
+/* Скрываем прокрутку в браузере */
+body {
+    overflow-x: hidden; /* Убираем горизонтальную полосу прокрутки на уровне страницы */
 }
 
 /* Скрыть столбец "Голоса" */
