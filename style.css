@@ -232,8 +232,9 @@ tr:hover {
     display: flex;
     flex-wrap: nowrap; /* Вкладки не переносятся на новую строку */
     gap: 10px; /* Расстояние между вкладками */
-    margin: 20px 0;
-    padding: 10px;
+    margin: 0;
+    padding-top: 45px;
+    padding-botton: 45px;
     justify-content: center; /* Центрирование вкладок, если они вмещаются */
     overflow-x: auto; /* Горизонтальная прокрутка, если вкладки не вмещаются */
     scroll-snap-type: x mandatory; /* Привязка к вкладкам при прокрутке */
