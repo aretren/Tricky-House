@@ -230,8 +230,8 @@ tr:hover {
     flex-wrap: nowrap; /* Чтобы все вкладки не переносились на новую строку */
     overflow-x: auto; /* Прокрутка влево/вправ */
     gap: 10px;
-    margin: 40px 0;
-    padding-bottom: 40px; /* Добавим немного отступа для удобства */
+    margin: 20px 0;
+    padding-bottom: 45px 45px; /* Добавим немного отступа для удобства */
     width: 100%;
 }
 
