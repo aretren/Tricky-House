@@ -231,7 +231,8 @@ tr:hover {
     overflow-x: auto; /* Прокрутка влево/вправ */
     gap: 10px;
     margin: 20px 0;
-    padding-bottom: 45px 45px; /* Добавим немного отступа для удобства */
+    padding-top: 45px;
+    padding-bottom: 45px; /* Добавим немного отступа для удобства */
     width: 100%;
 }
 
