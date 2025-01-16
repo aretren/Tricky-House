@@ -248,3 +248,8 @@ tr:hover {
     transform: scale(1.1);
     z-index: 1;
 }
+
+/* Скрыть столбец "Голоса" */
+.hidden-column {
+    display: none;
+}
