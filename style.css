@@ -235,7 +235,7 @@ tr:hover {
     padding-bottom: 45px;
     width: 100%;
     position: relative;
-    scroll-padding: 0 50vw; /* Центрируем прокрутку для начала и конца */
+    scroll-padding: 0 30vw; /* Центрируем прокрутку для начала и конца */
 }
 
 #tabsContainer::before,
