@@ -26,38 +26,30 @@ const tableBody = document.getElementById("table-body");
 const nominationCheckboxes = document.getElementById("nominationCheckboxes");
 
 // Загрузка списка номинаций
-onValue(secondListRef, (snapshot) => {
-    tableBody.innerHTML = ""; // Очищаем таблицу
-    const data = snapshot.val();
-    if (data) {
-        Object.entries(data).forEach(([key, value]) => {
-            const row = document.createElement("tr");
+onValue(nominationRef, (snapshot) => {
+  nominationCheckboxes.innerHTML = ""; // Очищаем список номинаций
+  const data = snapshot.val();
+  if (data) {
+    Object.entries(data).forEach(([key, nomination]) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "nomination-wrapper";
 
-            // Имя конкурсанта
-            const nameCell = document.createElement("td");
-            nameCell.textContent = value.name;
-            row.appendChild(nameCell);
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.id = `nomination-${key}`;
+      checkbox.value = nomination;
 
-            // Номинации
-            const nominationsCell = document.createElement("td");
-            nominationsCell.textContent = value.nominations.join(", ");
-            row.appendChild(nominationsCell);
+      const label = document.createElement("label");
+      label.htmlFor = `nomination-${key}`;
+      label.textContent = nomination;
 
-            // Убираем создание ячейки для голосов
-
-            // Кнопка удаления
-            const deleteCell = document.createElement("td");
-            const deleteButton = document.createElement("button");
-            deleteButton.textContent = "Удалить";
-            deleteButton.onclick = () => remove(ref(db, `secondTableData/${key}`));
-            deleteCell.appendChild(deleteButton);
-            row.appendChild(deleteCell);
-
-            tableBody.appendChild(row);
-        });
-    } else {
-        tableBody.innerHTML = "<tr><td colspan='4'>Список пуст.</td></tr>";
-    }
+      wrapper.appendChild(checkbox);
+      wrapper.appendChild(label);
+      nominationCheckboxes.appendChild(wrapper);
+    });
+  } else {
+    nominationCheckboxes.innerHTML = "<p>Нет доступных номинаций.</p>";
+  }
 });
 
 // Добавление конкурсанта
@@ -111,12 +103,7 @@ onValue(secondListRef, (snapshot) => {
       nominationsCell.textContent = value.nominations.join(", ");
       row.appendChild(nominationsCell);
 
-      // Голоса по номинациям
-      const votesCell = document.createElement("td");
-      votesCell.textContent = Object.entries(value.votesByNomination)
-        .map(([nomination, count]) => `${nomination}: ${count}`)
-        .join(", ");
-      row.appendChild(votesCell);
+      // Убираем создание ячейки для голосов
 
       // Кнопка удаления
       const deleteCell = document.createElement("td");
@@ -129,6 +116,6 @@ onValue(secondListRef, (snapshot) => {
       tableBody.appendChild(row);
     });
   } else {
-    tableBody.innerHTML = "<tr><td colspan='4'>Список пуст.</td></tr>";
+    tableBody.innerHTML = "<tr><td colspan='3'>Список пуст.</td></tr>";
   }
 });
