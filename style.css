@@ -240,13 +240,13 @@ tr:hover {
     padding-bottom: 45px;
     width: 100%;
     position: relative;
-    scroll-padding: 0 4vw; /* Центрируем прокрутку для начала и конца */
+    scroll-padding: 0 3vw; /* Центрируем прокрутку для начала и конца */
 }
 
 #tabsContainer::before,
 #tabsContainer::after {
     content: ""; /* Пустые элементы для центрирования */
-    flex: 0 0 4vw; /* Создаем отступы шириной половины экрана */
+    flex: 0 0 3vw; /* Создаем отступы шириной половины экрана */
 }
 
 /* Вкладка */
@@ -262,7 +262,6 @@ tr:hover {
     cursor: pointer;
     box-shadow: 0 0 15px rgba(138, 43, 226, 0.8), 0 0 20px rgba(75, 0, 130, 0.6);
     transition: all 0.3s ease;
-    scroll-snap-align: center; /* Центрирование вкладки при остановке прокрутки */
 }
 
 /* Наведение на вкладку */
