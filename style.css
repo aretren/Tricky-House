@@ -234,7 +234,7 @@ tr:hover {
     flex-wrap: nowrap; /* Не переносим элементы */
     overflow-x: auto; /* Включаем горизонтальную прокрутку */
     overflow-y: visible; /* Убираем обрезание свечения */
-    gap: 10px; /* Отступы между вкладками */
+    gap: 0; /* Отступы между вкладками */
     margin: 0; /* Убираем внешние отступы */
     padding-top: 0;
     padding-bottom: 0;
@@ -254,7 +254,7 @@ tr:hover {
 /* Вкладка */
 .tab-button {
     flex-shrink: 0; /* Вкладки не сжимаются */
-    padding: 10px 20px;
+    padding: 10px 10px;
     font-family: 'Ink Free', Arial, sans-serif;
     font-size: 16px;
     font-weight: bold;
@@ -266,7 +266,8 @@ tr:hover {
     box-shadow: 0 0 15px rgba(138, 43, 226, 0.8), 0 0 20px rgba(75, 0, 130, 0.6);
     scroll-snap-align: center; /* Привязка вкладок к центру при прокрутке */
     white-space: nowrap; /* Текст в одной строке, без переноса */
-    margin-right: 10px; /* Отступы между вкладками */
+    margin-right: 5px; /* Отступы между вкладками */
+    margin-left: 5px;
     transition: all 0.3s ease;
 }
 
