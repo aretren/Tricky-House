@@ -234,6 +234,7 @@ tr:hover {
     display: flex;
     flex-wrap: nowrap; /* Вкладки не переносятся на новую строку */
     overflow-x: auto; /* Горизонтальная прокрутка */
+    overflow-y: visible; /* Убираем обрезание свечения */
     gap: 10px; /* Расстояние между вкладками */
     margin: 0;
     padding-top: 45px;
@@ -241,12 +242,14 @@ tr:hover {
     width: 100%;
     position: relative;
     scroll-padding: 0 3vw; /* Центрируем прокрутку для начала и конца */
+    -webkit-overflow-scrolling: touch; /* Плавная прокрутка на мобильных устройствах */
 }
 
+/* Прозрачные отступы для центрирования свечения */
 #tabsContainer::before,
 #tabsContainer::after {
-    content: ""; /* Пустые элементы для центрирования */
-    flex: 0 0 3vw; /* Создаем отступы шириной половины экрана */
+    content: ""; /* Пустые элементы для отступов */
+    flex: 0 0 3vw; /* Ширина прозрачного отступа */
 }
 
 /* Вкладка */
@@ -261,6 +264,8 @@ tr:hover {
     border-radius: 15px;
     cursor: pointer;
     box-shadow: 0 0 15px rgba(138, 43, 226, 0.8), 0 0 20px rgba(75, 0, 130, 0.6);
+    scroll-snap-align: center; /* Привязка вкладок к центру при прокрутке */
+    white-space: nowrap; /* Запрещаем перенос текста внутри вкладки */
     transition: all 0.3s ease;
 }
 
@@ -274,10 +279,15 @@ tr:hover {
 .tab-button.active {
     background: linear-gradient(135deg, #ff00ff, #00e5ff);
     color: #121212;
-    box-shadow: 0 0 25px rgba(255, 20, 147, 0.9), 0 0 40px rgba(138, 43, 226, 0.8);
+    box-shadow: 0 0 40px rgba(255, 20, 147, 0.9), 0 0 60px rgba(138, 43, 226, 0.8); /* Увеличиваем размер свечения */
     border: 2px solid #ff00ff;
     transform: scale(1.1);
     z-index: 1;
+}
+
+/* Убираем горизонтальную полосу прокрутки */
+#tabsContainer::-webkit-scrollbar {
+    display: none; /* Скрываем полосу прокрутки на веб-ките */
 }
 
 /* Скрыть столбец "Голоса" */
