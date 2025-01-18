@@ -232,16 +232,17 @@ tr:hover {
 /* Вкладки голосования: контейнер */
 #tabsContainer {
     display: flex;
-    flex-wrap: nowrap; /* Вкладки не переносятся на новую строку */
-    overflow-x: auto; /* Горизонтальная прокрутка */
+    flex-direction: row; /* Указываем горизонтальное расположение */
+    flex-wrap: nowrap; /* Не переносим элементы */
+    overflow-x: auto; /* Включаем горизонтальную прокрутку */
     overflow-y: visible; /* Убираем обрезание свечения */
     gap: 10px; /* Расстояние между вкладками */
-    margin: 0;
+    margin: 0; /* Убираем внешние отступы */
     padding-top: 45px;
     padding-bottom: 45px;
-    width: 100%;
+    width: 100%; /* Занимаем всю ширину */
     position: relative;
-    scroll-padding: 0 3vw; /* Центрируем прокрутку для начала и конца */
+    scroll-padding: 0 3vw; /* Центрируем начало и конец прокрутки */
     -webkit-overflow-scrolling: touch; /* Плавная прокрутка на мобильных устройствах */
 }
 
@@ -254,6 +255,7 @@ tr:hover {
 
 /* Вкладка */
 .tab-button {
+    flex-shrink: 0; /* Вкладки не сжимаются */
     padding: 10px 20px;
     font-family: 'Ink Free', Arial, sans-serif;
     font-size: 16px;
@@ -265,7 +267,7 @@ tr:hover {
     cursor: pointer;
     box-shadow: 0 0 15px rgba(138, 43, 226, 0.8), 0 0 20px rgba(75, 0, 130, 0.6);
     scroll-snap-align: center; /* Привязка вкладок к центру при прокрутке */
-    white-space: nowrap; /* Запрещаем перенос текста внутри вкладки */
+    white-space: nowrap; /* Текст в одной строке, без переноса */
     transition: all 0.3s ease;
 }
 
@@ -287,7 +289,7 @@ tr:hover {
 
 /* Убираем горизонтальную полосу прокрутки */
 #tabsContainer::-webkit-scrollbar {
-    display: none; /* Скрываем полосу прокрутки на веб-ките */
+    display: none; /* Скрываем полосу прокрутки */
 }
 
 /* Скрыть столбец "Голоса" */
