@@ -230,7 +230,7 @@ tr:hover {
 /* Вкладки голосования: контейнер */
 #tabsContainer {
     display: flex;
-    flex-direction: row; /* Указываем горизонтальное расположение */
+    flex-direction: center; /* Указываем горизонтальное расположение */
     flex-wrap: nowrap; /* Не переносим элементы */
     overflow-x: auto; /* Включаем горизонтальную прокрутку */
     overflow-y: visible; /* Убираем обрезание свечения */
