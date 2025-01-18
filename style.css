@@ -236,8 +236,8 @@ tr:hover {
     overflow-y: visible; /* Убираем обрезание свечения */
     gap: 10px; /* Отступы между вкладками */
     margin: 0; /* Убираем внешние отступы */
-    padding-top: 45px;
-    padding-bottom: 45px;
+    padding-top: 50px;
+    padding-bottom: 50px;
     width: 100%; /* Занимаем всю ширину */
     position: relative;
     scroll-padding: 0 3vw; /* Центрируем начало и конец прокрутки */
