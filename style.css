@@ -236,7 +236,7 @@ tr:hover {
     flex-wrap: nowrap; /* Не переносим элементы */
     overflow-x: auto; /* Включаем горизонтальную прокрутку */
     overflow-y: visible; /* Убираем обрезание свечения */
-    gap: 10px; /* Расстояние между вкладками */
+    gap: 10px; /* Отступы между вкладками */
     margin: 0; /* Убираем внешние отступы */
     padding-top: 45px;
     padding-bottom: 45px;
@@ -268,7 +268,13 @@ tr:hover {
     box-shadow: 0 0 15px rgba(138, 43, 226, 0.8), 0 0 20px rgba(75, 0, 130, 0.6);
     scroll-snap-align: center; /* Привязка вкладок к центру при прокрутке */
     white-space: nowrap; /* Текст в одной строке, без переноса */
+    margin-right: 10px; /* Отступы между вкладками */
     transition: all 0.3s ease;
+}
+
+/* Убираем лишний отступ после последней вкладки */
+.tab-button:last-child {
+    margin-right: 0;
 }
 
 /* Наведение на вкладку */
