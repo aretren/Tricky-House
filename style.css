@@ -254,7 +254,8 @@ tr:hover {
 /* Вкладка */
 .tab-button {
     flex-shrink: 0; /* Вкладки не сжимаются */
-    padding: 10px 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     font-family: 'Ink Free', Arial, sans-serif;
     font-size: 16px;
     font-weight: bold;
