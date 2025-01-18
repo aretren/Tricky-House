@@ -288,7 +288,7 @@ tr:hover {
 .tab-button.active {
     background: linear-gradient(135deg, #ff00ff, #00e5ff);
     color: #121212;
-    box-shadow: 0 0 40px rgba(255, 20, 147, 0.9), 0 0 45px rgba(138, 43, 226, 0.8); /* Увеличиваем размер свечения */
+    box-shadow: 0 0 35px rgba(255, 20, 147, 0.9), 0 0 35px rgba(138, 43, 226, 0.8); /* Увеличиваем размер свечения */
     border: 2px solid #ff00ff;
     transform: scale(1.1);
     z-index: 1;
