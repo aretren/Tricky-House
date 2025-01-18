@@ -227,8 +227,6 @@ tr:hover {
     filter: drop-shadow(0 0 15px rgba(138, 43, 226, 0.8));
 }
 
-}
-
 /* Вкладки голосования: контейнер */
 #tabsContainer {
     display: flex;
